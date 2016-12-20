@@ -14,7 +14,7 @@ yellow=Color(0xffff00,1.0)
 thinline = LineStyle(1, black)
 noline=LineStyle(0,white)
 
-class Background(App):
+class Background(Sprite):
     def __init__(self):
         background=RectangleAsset(0,0,noline,black)
 
