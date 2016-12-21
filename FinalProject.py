@@ -16,7 +16,9 @@ noline=LineStyle(0,white)
 
 class Background(Sprite):
     def __init__(self):
-        background=RectangleAsset(0,0,noline,black)
+        background=RectangleAsset(128,294,noline,black)
+        Sprite(background,(0,0))
+        
 
 myapp=Background()
 myapp.run()
