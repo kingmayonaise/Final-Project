@@ -14,12 +14,6 @@ yellow=Color(0xffff00,1.0)
 thinline = LineStyle(1, black)
 noline=LineStyle(0,white)
 
-class Background(App):
-    def __init__(self,width,height):
-        super().__init__(width,height)
-        background=RectangleAsset(width, height, noline, black)
-        bg=Sprite(background, (0,0))
-
 class Pacman(Sprite):
     #pacman=CircleAsset(5,noline,yellow)
     pacman=RectangleAsset(20,10,noline,yellow)
@@ -28,15 +22,29 @@ class Pacman(Sprite):
         self.vx=1
         self.vy=1
         self.vr=0.01
+        self.moving=0
+        self.movingframe=1
+        PacmanGame.listenKeyEvent("keyleft", self.ismoving)
+        PacmanGame
         
     def step(self):
         self.x+=self.vx
         self.y+=self.vy
-        self.r+=self.vr
+        self.rotation+=self.vr
+
+class PacmanGame(App):
+    def __init__(self,width,height):
+        super().__init__(width,height)
+        background=RectangleAsset(width, height, noline, black)
+        bg=Sprite(background, (0,0))
+        
+    def step(self):
+        for pman in self.geSpritesbyClass(Pacman):
+            pman.step()
         
         
 
-myapp=Background(700,500) #Needs to go first so sprites show on top of it
+myapp=PacmanGame(700,500) #Needs to go first so sprites show on top of it
 
 Pacman((100,100))
 myapp.run()
