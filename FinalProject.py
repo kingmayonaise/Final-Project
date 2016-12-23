@@ -26,6 +26,8 @@ class Pacman(Sprite):
         self.vr=0
         self.moving=0
         self.movingframe=1
+        if Pacman((200,100)):
+            self.vx=0
         '''
         When keys are pressed
         '''
