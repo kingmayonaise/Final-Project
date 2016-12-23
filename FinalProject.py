@@ -21,13 +21,13 @@ class Pacman(Sprite):
     #pacman=RectangleAsset(20,10,noline,yellow)
     def __init__(self,position):
         super().__init__(Pacman.pacman,position)
+        self.position=position
         self.vx=0
         self.vy=0
         self.vr=0
         self.moving=0
         self.movingframe=1
-        if Pacman((200,100)):
-            self.vx=0
+        
         '''
         When keys are pressed
         '''
@@ -47,6 +47,10 @@ class Pacman(Sprite):
     def rightmoving(self,event):
             self.vx=1
             self.vy=0
+        if self.position==(200,100):
+            self.vx=0
+        else:
+            self.vx=1
             
     def leftmoving(self,event):
             self.vx=-1
@@ -67,6 +71,10 @@ class Pacman(Sprite):
         self.x+=self.vx
         self.y+=self.vy
         self.rotation+=self.vr
+    
+    #def collision(self,position):
+     #   if self.position==(200,y):
+       #     self.vx=0
 
 class PacmanGame(App):
     def __init__(self,width,height):
