@@ -47,10 +47,6 @@ class Pacman(Sprite):
     def rightmoving(self,event):
             self.vx=1
             self.vy=0
-        if self.position==(200,100):
-            self.vx=0
-        else:
-            self.vx=1
             
     def leftmoving(self,event):
             self.vx=-1
@@ -59,6 +55,7 @@ class Pacman(Sprite):
     def downmoving(self,event):
             self.vy=1
             self.vx=0
+            
     def upmoving(self,event):
             self.vy=-1
             self.vx=0
