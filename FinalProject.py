@@ -3,7 +3,8 @@ Final Project
 '''
 from collections import Counter
 from math import floor
-from ggame import App, Color, LineStyle, Sprite, RectangleAsset, CircleAsset, EllipseAsset, PolygonAsset, ImageAsset, MouseEvent, Frame
+from ggame import App, Color, LineStyle, Sprite, RectangleAsset
+from ggame import CircleAsset, EllipseAsset, PolygonAsset, ImageAsset, MouseEvent, Frame
 
 red = Color(0xff0000, 1.0)
 green = Color(0x00ff00, 1.0)
@@ -69,19 +70,22 @@ class Pacman(Sprite):
         self.y+=self.vy
         self.rotation+=self.vr
     
-    #def collision(self,position):
-     #   if self.position==(200,y):
-       #     self.vx=0
+    def collision(self,position):
+        if position==(200,y):
+            rightmoving.vx=0
+            leftmoving.vx=0
+            downmoving.vy=0
+            upmoving.vy=0
 
-class PacmanGame(App):
-    def __init__(self,width,height):
-        super().__init__(width,height)
-        background=RectangleAsset(width, height, noline, black)
-        bg=Sprite(background, (0,0))
+#class PacmanGame(App):
+ #   def __init__(self,width,height):
+  #      super().__init__(width,height)
+   #     background=RectangleAsset(width, height, noline, black)
+    #    bg=Sprite(background, (0,0))
         
-    def step(self):
-        for pman in self.getSpritesbyClass(Pacman):
-            pman.step()
+def step(self):
+    for pman in self.getSpritesbyClass(Pacman):
+        pman.step()
         
         
 class OtherSprites(Sprite):
@@ -92,7 +96,7 @@ class OtherSprites(Sprite):
 
 myapp=PacmanGame(700,500) #Needs to go first so sprites show on top of it
 
-Pacman((100,100))
+Pacman((100,25))
 OtherSprites()
 myapp.run()
 
