@@ -77,24 +77,36 @@ class Pacman(Sprite):
             downmoving.vy=0
             upmoving.vy=0
 
-#class PacmanGame(App):
- #   def __init__(self,width,height):
-  #      super().__init__(width,height)
-   #     background=RectangleAsset(width, height, noline, black)
-    #    bg=Sprite(background, (0,0))
+class Ghost(Pacman):
+    def __init__(self):
         
-def step(self):
-    for pman in self.getSpritesbyClass(Pacman):
-        pman.step()
+        
+class PacmanGame(App):
+    def __init__(self,width,height):
+        super().__init__(width,height)
+        background=RectangleAsset(width, height, noline, black)
+        bg=Sprite(background, (0,0))
+        
+    def step(self):
+        for pman in self.getSpritesbyClass(Pacman):
+            pman.step()
+        
+        
+class Maze():
+    def __init__(self):
+        pass #Will put stuff here later
+    
+    def open(x,y):
+        return True
         
         
 class OtherSprites(Sprite):
     def __init__(self):
-        wall=RectangleAsset(10,200,noline,white)
+        wall=RectangleAsset(10,200,noline,black)
         wallsprite=Sprite(wall, (200,25))
         
 
-myapp=PacmanGame(700,500) #Needs to go first so sprites show on top of it
+myapp=PacmanGame(0,0) #Needs to go first so sprites show on top of it
 
 Pacman((100,25))
 OtherSprites()
