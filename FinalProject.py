@@ -17,11 +17,11 @@ noline=LineStyle(0,white)
 
 
 
-class Pacman(Sprite):
-    pacman=CircleAsset(10,noline,yellow)
+class pacman(Sprite):
+    pacmanSprite=CircleAsset(10,noline,yellow)
     #pacman=RectangleAsset(20,10,noline,yellow)
     def __init__(self,position):
-        super().__init__(Pacman.pacman,position)
+        super().__init__(pacman.pacmanSprite,position)
         self.position=position
         self.vx=0
         self.vy=0
@@ -33,10 +33,10 @@ class Pacman(Sprite):
         When keys are pressed
         '''
         
-        PacmanGame.listenKeyEvent("keydown","right arrow", self.rightmoving)
-        PacmanGame.listenKeyEvent("keydown","left arrow",self.leftmoving)
-        PacmanGame.listenKeyEvent("keydown","down arrow",self.downmoving)
-        PacmanGame.listenKeyEvent("keydown","up arrow",self.upmoving)
+        pacmanGame.listenKeyEvent("keydown","right arrow", self.rightmoving)
+        pacmanGame.listenKeyEvent("keydown","left arrow",self.leftmoving)
+        pacmanGame.listenKeyEvent("keydown","down arrow",self.downmoving)
+        pacmanGame.listenKeyEvent("keydown","up arrow",self.upmoving)
         '''
         When keys are released
         '''
@@ -77,11 +77,12 @@ class Pacman(Sprite):
             downmoving.vy=0
             upmoving.vy=0
 
-class Ghost(Pacman):
-    def __init__(self):
+class ghost(Pacman):
+    ghostRed=RectangleAsset(20,10,noline,red)
+    def __init__(self,postion):
         
         
-class PacmanGame(App):
+class pacmanGame(App):
     def __init__(self,width,height):
         super().__init__(width,height)
         background=RectangleAsset(width, height, noline, black)
@@ -92,7 +93,7 @@ class PacmanGame(App):
             pman.step()
         
         
-class Maze():
+class maze():
     def __init__(self):
         pass #Will put stuff here later
     
@@ -106,11 +107,23 @@ class OtherSprites(Sprite):
         wallsprite=Sprite(wall, (200,25))
         
 
-myapp=PacmanGame(0,0) #Needs to go first so sprites show on top of it
+myapp=pacmanGame(0,0) #Needs to go first so other sprites show on top of it
 
-Pacman((100,25))
+pacman((100,25))
 OtherSprites()
 myapp.run()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
