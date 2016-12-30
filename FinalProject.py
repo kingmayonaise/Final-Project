@@ -70,16 +70,26 @@ class pacman(Sprite):
         self.y+=self.vy
         self.rotation+=self.vr
     
-    def collision(self,position):
-        if position==(200,y):
-            rightmoving.vx=0
-            leftmoving.vx=0
-            downmoving.vy=0
-            upmoving.vy=0
+    #def collision(self,position):
+     #   if position==(200,y):
+      #      rightmoving.vx=0
+       #     leftmoving.vx=0
+        #    downmoving.vy=0
+         #   upmoving.vy=0
 
-class ghost(Pacman):
+class ghost(pacman):
     ghostRed=RectangleAsset(20,10,noline,red)
-    def __init__(self,postion):
+    def __init__(self,position):
+        super().__init__(ghost.ghostRed,position)
+        #self.position=position
+        #self.vx=0
+        #self.vy=0
+        #self.vr=0
+        #self.moving=0
+        #self.movingframe=1
+        
+        
+        
         
         
 class pacmanGame(App):
@@ -89,8 +99,11 @@ class pacmanGame(App):
         bg=Sprite(background, (0,0))
         
     def step(self):
-        for pman in self.getSpritesbyClass(Pacman):
+        for pman in self.getSpritesbyClass(pacman):
             pman.step()
+        
+        for rghost in self.getSpritesbyClass(ghost):
+            rghost.step()
         
         
 class maze():
@@ -110,6 +123,7 @@ class OtherSprites(Sprite):
 myapp=pacmanGame(0,0) #Needs to go first so other sprites show on top of it
 
 pacman((100,25))
+ghost((200,200))
 OtherSprites()
 myapp.run()
 
