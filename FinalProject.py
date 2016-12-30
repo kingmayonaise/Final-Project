@@ -77,16 +77,16 @@ class pacman(Sprite):
         #    downmoving.vy=0
          #   upmoving.vy=0
 
-class ghost(pacman):
+class ghost(Sprite):
     ghostRed=RectangleAsset(20,10,noline,red)
     def __init__(self,position):
         super().__init__(ghost.ghostRed,position)
-        #self.position=position
-        #self.vx=0
-        #self.vy=0
-        #self.vr=0
-        #self.moving=0
-        #self.movingframe=1
+        self.position=position
+        self.vx=0
+        self.vy=0
+        self.vr=0
+        self.moving=0
+        self.movingframe=1
         
         
         
