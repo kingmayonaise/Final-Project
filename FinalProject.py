@@ -70,12 +70,7 @@ class pacman(Sprite):
         self.y+=self.vy
         self.rotation+=self.vr
     
-    #def collision(self,position):
-     #   if position==(200,y):
-      #      rightmoving.vx=0
-       #     leftmoving.vx=0
-        #    downmoving.vy=0
-         #   upmoving.vy=0
+    
 
 #class ghost(Sprite):
  #   ghostRed=RectangleAsset(20,10,noline,red)
