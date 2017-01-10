@@ -88,7 +88,7 @@ class Maze(Layout):
             x = self.currentCell % self.dimX
             y = self.currentCell / self.dimX
             neighbors = []
-            for i in xrange(4):
+            for i in range(4):
                 nx = x + self.compass[i][0]
                 ny = y + self.compass[i][1]
                 if ((nx >= 0) and (ny >= 0) and (nx < self.dimX) and (ny < self.dimY)):
