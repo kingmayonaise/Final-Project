@@ -1,6 +1,17 @@
 import pygame, random
 from pygame.locals import *
 
+from ggame import App, Color, LineStyle, Sprite, RectangleAsset, CircleAsset, EllipseAsset, PolygonAsset, ImageAsset, MouseEvent, Frame
+
+red = Color(0xff0000, 1.0)
+green = Color(0x00ff00, 1.0)
+black = Color(0x000000, 1.0)
+white=Color(0xffffff,1.0)
+yellow=Color(0xffff00,1.0)
+
+thinline = LineStyle(1, black)
+noline=LineStyle(0,white)
+
    
 cLevel=0.0
 cLeveli=int(cLevel)
