@@ -349,7 +349,9 @@ def main():
                 #pygame.display.quit()
                 #pygame.quit()
                 break
+            else:
+                break
             
-        
+        break
 
 if __name__ == '__main__': main()
