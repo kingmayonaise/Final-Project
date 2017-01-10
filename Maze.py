@@ -76,11 +76,11 @@ class Maze(Layout):
         self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
         
         for y in xrange(self.dimY): # 80 wide + 60 tall
-            pygame.draw.line(self.mLayer, (0,0,0,255), (0, y*self.cellSize), (self.dimX*self.cellSize, y*self.cellSize))
+            #pygame.draw.line(self.mLayer, (0,0,0,255), (0, y*self.cellSize), (self.dimX*self.cellSize, y*self.cellSize))
             for x in xrange(self.dimX):
                 self.mazeArray.append(0)
                 if ( y == 0 ):
-                    pygame.draw.line(self.mLayer, (0,0,0,255), (x*self.cellSize,0), (x*self.cellSize,self.dimY*self.cellSize))
+                    #pygame.draw.line(self.mLayer, (0,0,0,255), (x*self.cellSize,0), (x*self.cellSize,self.dimY*self.cellSize))
 
         while(self.visitedCells < self.totalCells):
             x = self.currentCell % self.dimX
@@ -100,16 +100,16 @@ class Maze(Layout):
                 dy = y*self.cellSize
                 if direction & 1:
                     self.mazeArray[nidx] |= (4)
-                    pygame.draw.line(self.mLayer, (0,0,0,0), (dx,dy+1),(dx,dy+self.cellSize-1))
+                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx,dy+1),(dx,dy+self.cellSize-1))
                 elif direction & 2:
                     self.mazeArray[nidx] |= (8)
-                    pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy+self.cellSize),(dx+self.cellSize-1,dy+self.cellSize))
+                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy+self.cellSize),(dx+self.cellSize-1,dy+self.cellSize))
                 elif direction & 4:
                     self.mazeArray[nidx] |= (1)
-                    pygame.draw.line(self.mLayer, (0,0,0,0), (dx+self.cellSize,dy+1),(dx+self.cellSize,dy+self.cellSize-1))
+                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+self.cellSize,dy+1),(dx+self.cellSize,dy+self.cellSize-1))
                 elif direction & 8:
                     self.mazeArray[nidx] |= (2)
-                    pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy),(dx+self.cellSize-1,dy))
+                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy),(dx+self.cellSize-1,dy))
                 self.mazeArray[self.currentCell] |= direction
                 self.cellStack.append(self.currentCell)
                 self.currentCell = nidx
@@ -125,25 +125,28 @@ class Maze(Layout):
         for bubbleCell in self.bubbleArray:
             dx = (bubbleCell % self.dimX)*self.cellSize
             dy = (bubbleCell / self.dimX)*self.cellSize
-            pygame.draw.circle(self.sLayer, (0,0,255,200), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/4)
+            #pygame.draw.circle(self.sLayer, (0,0,255,200), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/4)
 
     def drawGhosts(self):
         for g in self.ghostArray:
             gCell=g.myLocation()
             dx = (gCell % self.dimX)*self.cellSize
             dy = (gCell / self.dimX)*self.cellSize
-            pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
+            #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
             
     def drawPacman(self):
         pCell=self.Pacman.myLocation()
         dx = (pCell % self.dimX)*self.cellSize
         dy = (pCell / self.dimX)*self.cellSize
         if self.Pacman.getState()=='Playing':
-            pygame.draw.circle(self.sLayer, (250,240,0,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
+            pass
+            #pygame.draw.circle(self.sLayer, (250,240,0,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
         elif self.Pacman.getState()=='Lost':
-            pygame.draw.circle(self.sLayer, (211,211,211,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
+            pass
+            #pygame.draw.circle(self.sLayer, (211,211,211,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
         elif self.Pacman.getState()=='Won':
-            pygame.draw.circle(self.sLayer, (0,255,255,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
+            pass
+            #pygame.draw.circle(self.sLayer, (0,255,255,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
             
             
     def getMazeArray(self):
@@ -160,14 +163,14 @@ class Maze(Layout):
 
                     
     def draw(self,screen):
-        self.sLayer.fill((0, 0, 0, 0))
+        #self.sLayer.fill((0, 0, 0, 0))
 
         self.drawBubbles()
         self.drawGhosts()                
         self.drawPacman()        
         
-        screen.blit(self.sLayer, (0,0))
-        screen.blit(self.mLayer, (0,0))
+        #screen.blit(self.sLayer, (0,0))
+        #screen.blit(self.mLayer, (0,0))
         
     def checkCollisions(self):
         self.ghostLocations=[]
@@ -310,39 +313,39 @@ def main():
     gState='Play'
     while gState=='Play':
         incGlobals()       
-        pygame.init()        
-        screen = pygame.display.set_mode((cWidth*cCellSize, cHeight*cCellSize))
-        pygame.display.set_caption('Labyrinth: level '+str(cLeveli))
-        pygame.mouse.set_visible(0)
-        background = pygame.Surface(screen.get_size())
-        background = background.convert()
-        background.fill((255, 255, 255))
+        #pygame.init()        
+        screen = 1 #pygame.display.set_mode((cWidth*cCellSize, cHeight*cCellSize))
+        #pygame.display.set_caption('Labyrinth: level '+str(cLeveli))
+        #pygame.mouse.set_visible(0)
+        #background = pygame.Surface(screen.get_size())
+        #background = background.convert()
+        #background.fill((255, 255, 255))
         
         newMaze = Maze(screen)
         myPacman=Pacman(screen,newMaze.getMazeArray(), newMaze.getCellStack())
         newMaze.addPacman(myPacman)
     
-        screen.blit(background, (0, 0))
-        pygame.display.flip()
-        clock = pygame.time.Clock()
+        #screen.blit(background, (0, 0))
+        #pygame.display.flip()
+        #clock = pygame.time.Clock()
         while 1:
-            clock.tick(2)
-            screen.blit(background, (0, 0))
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    return
-                elif event.type == KEYDOWN and event.key in (K_UP,K_DOWN,K_RIGHT,K_LEFT):
-                    myPacman.update(event.key)
-                elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                    return
+            #clock.tick(2)
+            #screen.blit(background, (0, 0))
+            #for event in pygame.event.get():
+            #    if event.type == QUIT:
+            #        return
+            #    elif event.type == KEYDOWN and event.key in (K_UP,K_DOWN,K_RIGHT,K_LEFT):
+            #        myPacman.update(event.key)
+            #    elif event.type == KEYDOWN and event.key == K_ESCAPE:
+            #        return
             if myPacman.getState() =='Playing':
                 newMaze.checkCollisions()
             
             newMaze.draw(screen)
-            pygame.display.flip()
+            #pygame.display.flip()
             if myPacman.getState()=='Won':
-                pygame.display.quit()
-                pygame.quit()
+                #pygame.display.quit()
+                #pygame.quit()
                 break
             
         
