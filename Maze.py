@@ -81,6 +81,7 @@ class Maze(Layout):
             for x in xrange(self.dimX):
                 self.mazeArray.append(0)
                 if ( y == 0 ):
+                    pass
                     #pygame.draw.line(self.mLayer, (0,0,0,255), (x*self.cellSize,0), (x*self.cellSize,self.dimY*self.cellSize))
 
         while(self.visitedCells < self.totalCells):
