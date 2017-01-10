@@ -1,7 +1,7 @@
 import pygame, random
 from pygame.locals import *
 
-from ggame import App, Color, LineStyle, Sprite, RectangleAsset, CircleAsset, EllipseAsset, PolygonAsset, ImageAsset, MouseEvent, Frame
+from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, CircleAsset, PolygonAsset, ImageAsset, Frame
 
 red = Color(0xff0000, 1.0)
 green = Color(0x00ff00, 1.0)
@@ -19,6 +19,10 @@ cLeveli=int(cLevel)
 cWidth=int(round(12*(1+cLevel*0.4),0))
 cHeight=int(round(9*(1+cLevel*0.4),0))
 cCellSize=16
+
+aCellWallH=LineAsset(cCellSize,0,thinline)
+aCellWallV=LineAsset(0,cCellSize,thinline)
+
     
 def incGlobals():
     global cLevel
