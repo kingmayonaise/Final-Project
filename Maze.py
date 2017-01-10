@@ -1,6 +1,7 @@
-import pygame, random
-from pygame.locals import *
+#import pygame, random
+#from pygame.locals import *
 
+import random
 from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, CircleAsset, PolygonAsset, ImageAsset, Frame
 
 red = Color(0xff0000, 1.0)
