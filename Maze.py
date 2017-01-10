@@ -47,14 +47,14 @@ class Layout(object):
         self.dimY=cHeight #10 #30
         self.cellSize=cCellSize
         self.compass = [(-1,0),(0,1),(1,0),(0,-1)]
-        self.totalCells = self.dimX*self.dimY # 40 * 30
-        self.mLayer = pygame.Surface(pScreen.get_size())
-        self.mLayer = self.mLayer.convert_alpha()
-        self.mLayer.fill((0, 0, 0, 0))
+        #self.totalCells = self.dimX*self.dimY # 40 * 30
+        #self.mLayer = pygame.Surface(pScreen.get_size())
+        #self.mLayer = self.mLayer.convert_alpha()
+        #self.mLayer.fill((0, 0, 0, 0))
         
-        self.sLayer = pygame.Surface(pScreen.get_size())
-        self.sLayer = self.sLayer.convert_alpha()
-        self.sLayer.fill((0, 0, 0, 0))
+        #self.sLayer = pygame.Surface(pScreen.get_size())
+        #self.sLayer = self.sLayer.convert_alpha()
+        #self.sLayer.fill((0, 0, 0, 0))
 
         self.currentCell = random.randint(0, self.totalCells-1)
 
