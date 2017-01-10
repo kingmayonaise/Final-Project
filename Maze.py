@@ -47,7 +47,7 @@ class Layout(object):
         self.dimY=cHeight #10 #30
         self.cellSize=cCellSize
         self.compass = [(-1,0),(0,1),(1,0),(0,-1)]
-        #self.totalCells = self.dimX*self.dimY # 40 * 30
+        self.totalCells = self.dimX*self.dimY # 40 * 30
         #self.mLayer = pygame.Surface(pScreen.get_size())
         #self.mLayer = self.mLayer.convert_alpha()
         #self.mLayer.fill((0, 0, 0, 0))
@@ -76,9 +76,9 @@ class Maze(Layout):
         
         self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
         
-        for y in xrange(self.dimY): # 80 wide + 60 tall
+        for y in range(self.dimY): # 80 wide + 60 tall
             #pygame.draw.line(self.mLayer, (0,0,0,255), (0, y*self.cellSize), (self.dimX*self.cellSize, y*self.cellSize))
-            for x in xrange(self.dimX):
+            for x in range(self.dimX):
                 self.mazeArray.append(0)
                 if ( y == 0 ):
                     pass
