@@ -25,7 +25,7 @@ cCellSize=16
 aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
 aBubble    = CircleAsset(cCellSize/4,noline,blue)
-aGhost     = RectangleAsset(cCellSize/2,cCellSize,noline,green)
+aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,green)
     
 def incGlobals():
     global cLevel
@@ -78,8 +78,7 @@ class Maze(Layout):
         self.mazeDict={}
         
         self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
-        print (self.bubbleArray)
-        
+
         bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
         bg = Sprite(bg_asset, (0,0))
 
@@ -137,8 +136,10 @@ class Maze(Layout):
                 self.visitedCells = self.visitedCells + 1
             else:
                 self.currentCell = self.cellStack.pop()
-                
-        for i in range(cLeveli):     
+        
+        print(cLeveli)        
+        for i in range(cLeveli):
+            
             ghost1=Ghost(self.mScreen,self.getMazeArray(), self.getCellStack())
             self.addGhost(ghost1)
         
@@ -228,8 +229,11 @@ class Ghost(Layout):
         super(Ghost,self).__init__(pScreen)
         self.mazeArray = mArray
         self.cellStack=cStack
-        self.gImage=Sprite()
-        
+
+        dx = int(self.currentCell % self.dimX)*self.cellSize+int(self.cellSize/4)
+        dy = int(self.currentCell / self.dimX)*self.cellSize+int(+self.cellSize/4)
+        self.gImage=Sprite(aGhost,(dx,dy))
+
     def update(self):
         if self.currentCell == (self.totalCells-1): # have we reached the exit?            
             return
@@ -266,10 +270,10 @@ class Ghost(Layout):
                 self.mazeArray[self.currentCell] &= 0xF0FF # not a solution
                 self.currentCell = self.cellStack.pop()
                                 
-    def draw(self):
-            dx = int(self.currentCell % self.dimX)*self.cellSize
-            dy = int(self.currentCell / self.dimX)*self.cellSize
-            #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
+        dx = int(self.currentCell % self.dimX)*self.cellSize
+        dy = int(self.currentCell / self.dimX)*self.cellSize
+        self.gImage.position((dx,dy))    
+
 class Pacman(Layout):
         
     def __init__(self, pScreen, mArray, cStack):
@@ -340,6 +344,7 @@ class MazeGame(App):
 
     def __init__(self, width, height):
         super().__init__(width, height)
+        incGlobals()
         newMaze = Maze(1)
 
     def step1(self):
