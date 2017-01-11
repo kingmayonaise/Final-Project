@@ -269,10 +269,10 @@ class Ghost(Layout):
                 self.mazeArray[self.currentCell] &= 0xF0FF # not a solution
                 self.currentCell = self.cellStack.pop()
                                 
-    def draw(self):
-            dx = (self.currentCell % self.dimX)*self.cellSize
-            dy = (self.currentCell / self.dimX)*self.cellSize
-            #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
+        x = (self.currentCell % self.dimX)*self.cellSize
+        y = (self.currentCell / self.dimX)*self.cellSize
+        self.gImage.position(((x+self.cellSize/4,y+self.cellSize/4))
+
 class Pacman(Layout):
         
     def __init__(self, pScreen, mArray, cStack):
