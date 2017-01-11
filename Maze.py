@@ -6,6 +6,7 @@ from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, Circ
 
 red = Color(0xff0000, 1.0)
 green = Color(0x00ff00, 1.0)
+blue = Color(0x0000ff, 1.0)
 black = Color(0x000000, 1.0)
 white=Color(0xffffff,1.0)
 yellow=Color(0xffff00,1.0)
@@ -21,8 +22,9 @@ cWidth=int(round(12*(1+cLevel*0.4),0))
 cHeight=int(round(9*(1+cLevel*0.4),0))
 cCellSize=16
 
-aCellWallH=LineAsset(cCellSize,0,thinline)
-aCellWallV=LineAsset(0,cCellSize,thinline)
+aCellWallH = LineAsset(cCellSize,0,thinline)
+aCellWallV = LineAsset(0,cCellSize,thinline)
+aBubble    = CircleAsset(cCellSize/4,thinline,blue)
 
     
 def incGlobals():
@@ -330,7 +332,7 @@ class MazeGame(App):
     def __init__(self, width, height):
         super().__init__(width, height)
         newMaze = Maze(1)
-        
+
     def step1(self):
         gState='Play'
         while gState=='Play':
