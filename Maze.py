@@ -91,8 +91,6 @@ class Maze(Layout):
                 nx = x + self.compass[i][0]
                 ny = y + self.compass[i][1]
                 if ((nx >= 0) and (ny >= 0) and (nx < self.dimX) and (ny < self.dimY)):
-                    print (ny)
-                    print (ny*self.dimX+nx)
                     if (self.mazeArray[(ny*self.dimX+nx)] & 0x000F) == 0:
                         nidx = ny*self.dimX+nx
                         neighbors.append((nidx,1<<i))
@@ -309,50 +307,55 @@ class Pacman(Layout):
         self.state=pState
 
 
-def main():
-    """Maze Main Function - Luke Arntson, Jan '09
-        Written using - http://www.mazeworks.com/mazegen/mazetut/index.htm
-    """
-    gState='Play'
-    while gState=='Play':
-        incGlobals()       
-        #pygame.init()        
-        screen = 1 #pygame.display.set_mode((cWidth*cCellSize, cHeight*cCellSize))
-        #pygame.display.set_caption('Labyrinth: level '+str(cLeveli))
-        #pygame.mouse.set_visible(0)
-        #background = pygame.Surface(screen.get_size())
-        #background = background.convert()
-        #background.fill((255, 255, 255))
+class MazeGame(App):
+
+
+    def __init__(self, width, height):
+        super().__init__(width, height)
+        bg_asset = RectangleAsset(width, height, noline, black)
+        bg = Sprite(bg_asset, (0,0))
         
-        newMaze = Maze(screen)
-        myPacman=Pacman(screen,newMaze.getMazeArray(), newMaze.getCellStack())
-        newMaze.addPacman(myPacman)
-    
-        #screen.blit(background, (0, 0))
-        #pygame.display.flip()
-        #clock = pygame.time.Clock()
-        while 1:
-            #clock.tick(2)
+    def step(self)
+        gState='Play'
+        while gState=='Play':
+            incGlobals()       
+            #pygame.init()        
+            screen = 1 #pygame.display.set_mode((cWidth*cCellSize, cHeight*cCellSize))
+            #pygame.display.set_caption('Labyrinth: level '+str(cLeveli))
+            #pygame.mouse.set_visible(0)
+            #background = pygame.Surface(screen.get_size())
+            #background = background.convert()
+            #background.fill((255, 255, 255))
+            
+            newMaze = Maze(screen)
+            myPacman=Pacman(screen,newMaze.getMazeArray(), newMaze.getCellStack())
+            newMaze.addPacman(myPacman)
+        
             #screen.blit(background, (0, 0))
-            #for event in pygame.event.get():
-            #    if event.type == QUIT:
-            #        return
-            #    elif event.type == KEYDOWN and event.key in (K_UP,K_DOWN,K_RIGHT,K_LEFT):
-            #        myPacman.update(event.key)
-            #    elif event.type == KEYDOWN and event.key == K_ESCAPE:
-            #        return
-            if myPacman.getState() =='Playing':
-                newMaze.checkCollisions()
-            
-            newMaze.draw(screen)
             #pygame.display.flip()
-            if myPacman.getState()=='Won':
-                #pygame.display.quit()
-                #pygame.quit()
-                break
-            else:
-                break
-            
-        break
+            #clock = pygame.time.Clock()
+            while 1:
+                #clock.tick(2)
+                #screen.blit(background, (0, 0))
+                #for event in pygame.event.get():
+                #    if event.type == QUIT:
+                #        return
+                #    elif event.type == KEYDOWN and event.key in (K_UP,K_DOWN,K_RIGHT,K_LEFT):
+                #        myPacman.update(event.key)
+                #    elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                #        return
+                if myPacman.getState() =='Playing':
+                    newMaze.checkCollisions()
+                
+                newMaze.draw(screen)
+                #pygame.display.flip()
+                if myPacman.getState()=='Won':
+                    #pygame.display.quit()
+                    #pygame.quit()
+                    break
+                else:
+                    break
+                
+            break
 
 if __name__ == '__main__': main()
