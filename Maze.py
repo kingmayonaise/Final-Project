@@ -26,6 +26,7 @@ aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
 aBubble    = CircleAsset(cCellSize/4,noline,blue)
 aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,green)
+aRunner    = CircleAsset(cCellSize/2,noline,yellow)
     
 def incGlobals():
     global cLevel
@@ -160,17 +161,17 @@ class Maze(Layout):
             dy = int(gCell / self.dimX)*self.cellSize
             #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
             
-    def drawPacman(self):
-        pCell=self.Pacman.myLocation()
+    def drawRunner(self):
+        pCell=self.Runner.myLocation()
         dx = int(pCell % self.dimX)*self.cellSize
         dy = int(pCell / self.dimX)*self.cellSize
-        if self.Pacman.getState()=='Playing':
+        if self.Runner.getState()=='Playing':
             pass
             #pygame.draw.circle(self.sLayer, (250,240,0,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
-        elif self.Pacman.getState()=='Lost':
+        elif self.Runner.getState()=='Lost':
             pass
             #pygame.draw.circle(self.sLayer, (211,211,211,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
-        elif self.Pacman.getState()=='Won':
+        elif self.Runner.getState()=='Won':
             pass
             #pygame.draw.circle(self.sLayer, (0,255,255,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
             
@@ -184,8 +185,8 @@ class Maze(Layout):
     def addGhost(self, pGhost):
         self.ghostArray.append(pGhost)
 
-    def addPacman(self, pPacman):
-        self.Pacman=pPacman
+    def addRunner(self, pRunner):
+        self.Runner=pRunner
 
                     
     def draw(self,screen):
@@ -193,7 +194,7 @@ class Maze(Layout):
 
         self.drawBubbles()
         self.drawGhosts()                
-        self.drawPacman()        
+        self.drawRunner()        
         
         #screen.blit(self.sLayer, (0,0))
         #screen.blit(self.mLayer, (0,0))
@@ -201,7 +202,7 @@ class Maze(Layout):
     def checkCollisions(self):
         self.ghostLocations=[]
         ghostLocation=0
-        pCell=self.Pacman.myLocation()
+        pCell=self.Runner.myLocation()
 
         for g in self.ghostArray:
             g.update()
@@ -214,14 +215,14 @@ class Maze(Layout):
                 self.ghostLocations.append(ghostLocation)
         
         if pCell in self.ghostLocations:
-            self.Pacman.setState('Lost')
+            self.Runner.setState('Lost')
             return
          
         if pCell in self.bubbleArray:
             self.score +=1
             self.bubbleArray.remove(pCell)
             if len(self.bubbleArray)==0:
-                self.Pacman.setState('Won')
+                self.Runner.setState('Won')
 
 class Ghost(Layout):
         
@@ -274,10 +275,10 @@ class Ghost(Layout):
         dy = int(self.currentCell / self.dimX)*self.cellSize
         self.gImage.position((dx,dy))    
 
-class Pacman(Layout):
+class Runner(Layout):
         
     def __init__(self, pScreen, mArray, cStack):
-        super(Pacman,self).__init__(pScreen)
+        super(Runner,self).__init__(pScreen)
         self.mazeArray = mArray
         self.cellStack=cStack
         self.state='Playing'
@@ -360,8 +361,8 @@ class MazeGame(App):
             #background.fill((255, 255, 255))
             
             newMaze = Maze(screen)
-            myPacman=Pacman(screen,newMaze.getMazeArray(), newMaze.getCellStack())
-            newMaze.addPacman(myPacman)
+            myRunner=Runner(screen,newMaze.getMazeArray(), newMaze.getCellStack())
+            newMaze.addRunner(myRunner)
         
             #screen.blit(background, (0, 0))
             #pygame.display.flip()
@@ -373,15 +374,15 @@ class MazeGame(App):
                 #    if event.type == QUIT:
                 #        return
                 #    elif event.type == KEYDOWN and event.key in (K_UP,K_DOWN,K_RIGHT,K_LEFT):
-                #        myPacman.update(event.key)
+                #        myRunner.update(event.key)
                 #    elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 #        return
-                #if myPacman.getState() =='Playing':
+                #if myRunner.getState() =='Playing':
                 #    newMaze.checkCollisions()
                 
                 #newMaze.draw(screen)
                 #pygame.display.flip()
-                #if myPacman.getState()=='Won':
+                #if myRunner.getState()=='Won':
                     #pygame.display.quit()
                     #pygame.quit()
                     #break
