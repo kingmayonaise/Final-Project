@@ -63,7 +63,7 @@ class Layout(object):
 
     def myLocation(self):
         return self.currentCell
-     
+
 class Maze(Layout):
     
     def __init__(self, pScreen):
@@ -140,9 +140,8 @@ class Maze(Layout):
         
         for i in range(cLeveli):
             
-            ghost1=Ghost(self.mScreen,self.getMazeArray(), self.getCellStack())
-            print(ghost1)
-            self.ghostArray.append(ghost1)
+            self.ghost1=Ghost(self.mScreen,self.getMazeArray(), self.getCellStack())
+            self.ghostArray.append(self.ghost1)
         
         self.drawBubbles()
         
@@ -156,11 +155,12 @@ class Maze(Layout):
 
     def runGhosts(self):
         print('before run')
-        for g in self.ghostArray:
-            print('inside run')
-            print (self.ghostArray)
-            print(g)
-            g.update()
+        self.ghost1.update()
+        #for g in self.ghostArray:
+        #print('inside run')
+        #    print (self.ghostArray)
+        #    print(g)
+            #g.update()
         #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
             
     def drawRunner(self):
@@ -233,8 +233,11 @@ class Ghost(Layout):
         dx = int(self.currentCell % self.dimX)*self.cellSize+int(self.cellSize/4)
         dy = int(self.currentCell / self.dimX)*self.cellSize+int(+self.cellSize/4)
         self.gImage=Sprite(aGhost,(dx,dy))
+        print(self.gImage)
+        
 
     def update(self):
+        print('inside update 1')
         if self.currentCell == (self.totalCells-1): # have we reached the exit?            
             return
         moved = False
@@ -269,10 +272,14 @@ class Ghost(Layout):
             else:
                 self.mazeArray[self.currentCell] &= 0xF0FF # not a solution
                 self.currentCell = self.cellStack.pop()
+
                                 
-        dx = int(self.currentCell % self.dimX)*self.cellSize
-        dy = int(self.currentCell / self.dimX)*self.cellSize
-        self.gImage.position((dx,dy))    
+        dx = int(self.currentCell % self.dimX)*self.cellSize+int(self.cellSize/4)
+        dy = int(self.currentCell / self.dimX)*self.cellSize+int(+self.cellSize/4)
+        self.gImage.x=dx
+        self.gImage.y=dy
+        
+        print('inside update 3')
 
 class Runner(Layout):
         
@@ -344,61 +351,24 @@ class Runner(Layout):
 
 class MazeGame(App):
 
-
     def __init__(self, width, height):
         super().__init__(width, height)
         self.startRun()
+        self.steps=0
         
         
     def startRun(self):
+        
         incGlobals()
-        newMaze = Maze(1)
-        myRunner=Runner(1,newMaze.getMazeArray(), newMaze.getCellStack())
-        newMaze.addRunner(myRunner)
-        newMaze.runGhosts()
-
+        self.newMaze = Maze(1)
+        myRunner=Runner(1,self.newMaze.getMazeArray(), self.newMaze.getCellStack())
+        self.newMaze.addRunner(myRunner)
 
     def step(self):
-        gState='Play'
-        print ('step')
-        newMaze.runGhosts()
-        
-        #while gState=='Play':
-            #incGlobals()       
-            #pygame.init()        
-            #screen = 1 #pygame.display.set_mode((cWidth*cCellSize, cHeight*cCellSize))
-            #pygame.display.set_caption('Labyrinth: level '+str(cLeveli))
-            #pygame.mouse.set_visible(0)
-            #background = pygame.Surface(screen.get_size())
-            #background = background.convert()
-            #background.fill((255, 255, 255))
-            
-            #newMaze = Maze(screen)
-            #myRunner=Runner(screen,newMaze.getMazeArray(), newMaze.getCellStack())
-            #newMaze.addRunner(myRunner)
-        
-            #screen.blit(background, (0, 0))
-            #pygame.display.flip()
-            #clock = pygame.time.Clock()
-            #while 1:
-                #clock.tick(2)
-                #screen.blit(background, (0, 0))
-                #for event in pygame.event.get():
-                #    if event.type == QUIT:
-                #        return
-                #    elif event.type == KEYDOWN and event.key in (K_UP,K_DOWN,K_RIGHT,K_LEFT):
-                #        myRunner.update(event.key)
-                #    elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                #        return
-                #if myRunner.getState() =='Playing':
-                #    newMaze.checkCollisions()
-                
-                #newMaze.draw(screen)
-                #pygame.display.flip()
-                #if myRunner.getState()=='Won':
-                    #pygame.display.quit()
-                    #pygame.quit()
-                    #break
+        self.steps+=1
+        if ((self.steps % 20) == 0):
+            self.newMaze.runGhosts()
+
 
 myapp = MazeGame(600,600)
 myapp.run()
