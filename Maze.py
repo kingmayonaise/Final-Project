@@ -145,6 +145,7 @@ class Maze(Layout):
         for bubbleCell in self.bubbleArray:
             dx = (bubbleCell % self.dimX)*self.cellSize
             dy = (bubbleCell / self.dimX)*self.cellSize
+            Sprite(aBubble, (dx+self.cellSize/2,dy+self.cellSize/2))
             #pygame.draw.circle(self.sLayer, (0,0,255,200), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/4)
 
     def drawGhosts(self):
