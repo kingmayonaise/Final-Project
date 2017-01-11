@@ -197,6 +197,11 @@ class Maze(Layout):
         #screen.blit(self.mLayer, (0,0))
         
     def checkCollisions(self):
+        runnerSprite=self.Runner.getSprite()
+        ghostSprite=self.ghost1.getSprite()
+        print(len(runnerSprite.collidingWith(ghostSprite)))
+        return
+    
         self.ghostLocations=[]
         ghostLocation=0
         pCell=self.Runner.myLocation()
@@ -275,6 +280,8 @@ class Ghost(Layout):
         self.gImage.x=dx
         self.gImage.y=dy
         
+    def getSprite(self):
+        return self.gImage
 
 class Runner(Layout):
         
@@ -348,6 +355,9 @@ class Runner(Layout):
 
     def setState(self,pState):
         self.state=pState
+        
+    def getSprite(self):
+        return self.rImage
 
 
 class MazeGame(App):
@@ -374,6 +384,7 @@ class MazeGame(App):
         self.steps+=1
         if ((self.steps % 25) == 0):
             self.newMaze.runGhosts()
+        self.newMaze.checkCollisions()
             
     def runnerRuns(self, evt):
         self.myRunner.update(self.keymap[evt.key])
