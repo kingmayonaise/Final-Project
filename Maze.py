@@ -83,15 +83,16 @@ class Maze(Layout):
                 if ( y == 0 ):
                     pass
                     #pygame.draw.line(self.mLayer, (0,0,0,255), (x*self.cellSize,0), (x*self.cellSize,self.dimY*self.cellSize))
-
         while(self.visitedCells < self.totalCells):
-            x = self.currentCell % self.dimX
-            y = self.currentCell / self.dimX
+            x = int(self.currentCell % self.dimX)
+            y = int(self.currentCell / self.dimX)
             neighbors = []
             for i in range(4):
                 nx = x + self.compass[i][0]
                 ny = y + self.compass[i][1]
                 if ((nx >= 0) and (ny >= 0) and (nx < self.dimX) and (ny < self.dimY)):
+                    print (ny)
+                    print (ny*self.dimX+nx)
                     if (self.mazeArray[(ny*self.dimX+nx)] & 0x000F) == 0:
                         nidx = ny*self.dimX+nx
                         neighbors.append((nidx,1<<i))
@@ -215,7 +216,7 @@ class Ghost(Layout):
             y = self.currentCell / self.dimX
             neighbors = []
             directions = self.mazeArray[self.currentCell] & 0xF
-            for i in xrange(4):
+            for i in range(4):
                 if (directions & (1<<i)) > 0:
                     nx = x + self.compass[i][0]
                     ny = y + self.compass[i][1]
