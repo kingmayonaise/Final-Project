@@ -2,7 +2,7 @@
 #from pygame.locals import *
 
 import random
-from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, CircleAsset, PolygonAsset, ImageAsset, Frame
+from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, CircleAsset, PolygonAsset, Frame, KeyEvent
 
 red = Color(0xff0000, 1.0)
 green = Color(0x00ff00, 1.0)
@@ -366,7 +366,7 @@ class MazeGame(App):
 
     def step(self):
         self.steps+=1
-        if ((self.steps % 20) == 0):
+        if ((self.steps % 25) == 0):
             self.newMaze.runGhosts()
 
 
