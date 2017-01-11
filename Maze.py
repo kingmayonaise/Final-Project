@@ -155,14 +155,14 @@ class Maze(Layout):
     def drawGhosts(self):
         for g in self.ghostArray:
             gCell=g.myLocation()
-            dx = (gCell % self.dimX)*self.cellSize
-            dy = (gCell / self.dimX)*self.cellSize
+            dx = int(gCell % self.dimX)*self.cellSize
+            dy = int(gCell / self.dimX)*self.cellSize
             #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
             
     def drawPacman(self):
         pCell=self.Pacman.myLocation()
-        dx = (pCell % self.dimX)*self.cellSize
-        dy = (pCell / self.dimX)*self.cellSize
+        dx = int(pCell % self.dimX)*self.cellSize
+        dy = int(pCell / self.dimX)*self.cellSize
         if self.Pacman.getState()=='Playing':
             pass
             #pygame.draw.circle(self.sLayer, (250,240,0,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
@@ -267,8 +267,8 @@ class Ghost(Layout):
                 self.currentCell = self.cellStack.pop()
                                 
     def draw(self):
-            dx = (self.currentCell % self.dimX)*self.cellSize
-            dy = (self.currentCell / self.dimX)*self.cellSize
+            dx = int(self.currentCell % self.dimX)*self.cellSize
+            dy = int(self.currentCell / self.dimX)*self.cellSize
             #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
 class Pacman(Layout):
         
@@ -283,8 +283,8 @@ class Pacman(Layout):
         if self.state=='Lost':
             return
         
-        x = self.currentCell % self.dimX
-        y = self.currentCell / self.dimX
+        x = int(self.currentCell % self.dimX)
+        y = int(self.currentCell / self.dimX)
         dx = x*self.cellSize
         dy = y*self.cellSize
         
@@ -297,8 +297,8 @@ class Pacman(Layout):
                 
                 if ((nx >= 0) and (ny >= 0) and (nx < self.dimX) and (ny < self.dimY)): 
                     nidx = ny*self.dimX+nx
-                    nX=(nidx % self.dimX)*self.cellSize
-                    nY=(nidx / self.dimX)*self.cellSize
+                    nX=int(nidx % self.dimX)*self.cellSize
+                    nY=int(nidx / self.dimX)*self.cellSize
                      
                     if (uDirection==K_UP) and (nY<dy):
                         neighbors.append((nidx,1<<i))
