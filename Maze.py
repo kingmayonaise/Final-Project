@@ -358,4 +358,5 @@ class MazeGame(App):
                 
             break
 
-if __name__ == '__main__': main()
+myapp = MazeGame(600,600)
+myapp.run()
