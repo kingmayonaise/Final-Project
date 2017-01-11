@@ -45,7 +45,7 @@ def incGlobals():
 
 
 class Layout(object):
-    def __init__(self, pScreen):
+    def __init__(self):
         self.dimX=cWidth #20 #40
         self.dimY=cHeight #10 #30
         self.cellSize=cCellSize
@@ -66,8 +66,8 @@ class Layout(object):
 
 class Maze(Layout):
     
-    def __init__(self, pScreen):
-        super(Maze,self).__init__(pScreen)
+    def __init__(self):
+        super(Maze,self).__init__()
         self.mazeArray = []
         self.ghostArray=[]
         self.ghostLocations=[]
@@ -75,7 +75,6 @@ class Maze(Layout):
         self.cellStack = []
         self.visitedCells = 1
         self.score=0
-        self.mScreen=pScreen
         self.mazeDict={}
         
         self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
@@ -140,7 +139,7 @@ class Maze(Layout):
         
         for i in range(cLeveli):
             
-            self.ghost1=Ghost(self.mScreen,self.getMazeArray(), self.getCellStack())
+            self.ghost1=Ghost(self.getMazeArray(), self.getCellStack())
             self.ghostArray.append(self.ghost1)
         
         self.drawBubbles()
@@ -154,7 +153,6 @@ class Maze(Layout):
             #pygame.draw.circle(self.sLayer, (0,0,255,200), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/4)
 
     def runGhosts(self):
-        print('before run')
         self.ghost1.update()
         #for g in self.ghostArray:
         #print('inside run')
@@ -188,7 +186,7 @@ class Maze(Layout):
         self.Runner=pRunner
 
                     
-    def draw(self,screen):
+    def draw(self):
         #self.sLayer.fill((0, 0, 0, 0))
 
         self.drawBubbles()
@@ -208,7 +206,7 @@ class Maze(Layout):
             ghostLocation=g.myLocation()
             if ghostLocation==self.totalCells-1:
                 self.ghostArray.remove(g)
-                ghost1=Ghost(self.mScreen,self.getMazeArray(), self.getCellStack())
+                ghost1=Ghost(self.getMazeArray(), self.getCellStack())
                 self.addGhost(ghost1)
             else:
                 self.ghostLocations.append(ghostLocation)
@@ -225,19 +223,17 @@ class Maze(Layout):
 
 class Ghost(Layout):
         
-    def __init__(self, pScreen, mArray, cStack):
-        super(Ghost,self).__init__(pScreen)
+    def __init__(self,mArray, cStack):
+        super(Ghost,self).__init__()
         self.mazeArray = mArray
         self.cellStack=cStack
 
         dx = int(self.currentCell % self.dimX)*self.cellSize+int(self.cellSize/4)
         dy = int(self.currentCell / self.dimX)*self.cellSize+int(+self.cellSize/4)
         self.gImage=Sprite(aGhost,(dx,dy))
-        print(self.gImage)
-        
+
 
     def update(self):
-        print('inside update 1')
         if self.currentCell == (self.totalCells-1): # have we reached the exit?            
             return
         moved = False
@@ -279,12 +275,11 @@ class Ghost(Layout):
         self.gImage.x=dx
         self.gImage.y=dy
         
-        print('inside update 3')
 
 class Runner(Layout):
         
-    def __init__(self, pScreen, mArray, cStack):
-        super(Runner,self).__init__(pScreen)
+    def __init__(self, mArray, cStack):
+        super(Runner,self).__init__()
         self.mazeArray = mArray
         self.cellStack=cStack
         self.state='Playing'
@@ -314,16 +309,16 @@ class Runner(Layout):
                     nX=int(nidx % self.dimX)*self.cellSize
                     nY=int(nidx / self.dimX)*self.cellSize
                      
-                    if (uDirection==K_UP) and (nY<dy):
+                    if (uDirection=='up') and (nY<dy):
                         neighbors.append((nidx,1<<i))
                                            
-                    elif (uDirection==K_DOWN) and (nY>dy):
+                    elif (uDirection=='down') and (nY>dy):
                         neighbors.append((nidx,1<<i))
                         
-                    elif (uDirection==K_RIGHT) and (nX>dx):
+                    elif (uDirection=='right') and (nX>dx):
                         neighbors.append((nidx,1<<i))
                         
-                    elif (uDirection==K_LEFT) and (nX<dx):
+                    elif (uDirection=='left') and (nX<dx):
                         neighbors.append((nidx,1<<i))
                      
                          
@@ -341,6 +336,12 @@ class Runner(Layout):
             self.mazeArray[self.currentCell] |= direction << 8
             self.cellStack.append(self.currentCell)
             self.currentCell = nidx
+
+        dx = int(self.currentCell % self.dimX)*self.cellSize+self.cellSize/2
+        dy = int(self.currentCell / self.dimX)*self.cellSize+self.cellSize/2
+        self.rImage.x=dx
+        self.rImage.y=dy
+
             
     def getState(self):
         return self.state
@@ -355,19 +356,34 @@ class MazeGame(App):
         super().__init__(width, height)
         self.startRun()
         self.steps=0
-        
+        self.listenKeyEvent('keydown', 'escape', self.stopRun)
+        keys=["left arrow", "right arrow", "up arrow", "down arrow"]
+        commands = ["left", "right", "up", "down"]
+        self.keymap = dict(zip(keys, commands))
+        [self.listenKeyEvent("keydown", k, self.runnerRuns) for k in keys]
+        [self.listenKeyEvent("keyup", k, self.controlup) for k in keys]
         
     def startRun(self):
         
         incGlobals()
-        self.newMaze = Maze(1)
-        myRunner=Runner(1,self.newMaze.getMazeArray(), self.newMaze.getCellStack())
+        self.newMaze = Maze()
+        myRunner=Runner(self.newMaze.getMazeArray(), self.newMaze.getCellStack())
         self.newMaze.addRunner(myRunner)
 
     def step(self):
         self.steps+=1
         if ((self.steps % 25) == 0):
             self.newMaze.runGhosts()
+            
+    def runnerRuns(self, evt):
+        print(self.keymap[evt.key])
+        self.myRunner.update(self.keymap[evt.key])
+        evt.consumed=True
+        
+            
+    def stopRun(self,evt):
+        print (evt)
+        evt.consumed=True
 
 
 myapp = MazeGame(600,600)
