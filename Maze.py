@@ -315,7 +315,7 @@ class MazeGame(App):
         bg_asset = RectangleAsset(width, height, noline, black)
         bg = Sprite(bg_asset, (0,0))
         
-    def step(self)
+    def step(self):
         gState='Play'
         while gState=='Play':
             incGlobals()       
