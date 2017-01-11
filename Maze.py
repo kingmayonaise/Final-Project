@@ -25,6 +25,7 @@ cCellSize=16
 aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
 aBubble    = CircleAsset(cCellSize/4,thinline,blue)
+aGhost     = RectangleAssset()
 
     
 def incGlobals():
@@ -226,6 +227,7 @@ class Ghost(Layout):
         super(Ghost,self).__init__(pScreen)
         self.mazeArray = mArray
         self.cellStack=cStack
+        self.gImage=Sprite()
         
     def update(self):
         if self.currentCell == (self.totalCells-1): # have we reached the exit?            
@@ -263,7 +265,10 @@ class Ghost(Layout):
                 self.mazeArray[self.currentCell] &= 0xF0FF # not a solution
                 self.currentCell = self.cellStack.pop()
                                 
-
+    def draw(self):
+            dx = (self.currentCell % self.dimX)*self.cellSize
+            dy = (self.currentCell / self.dimX)*self.cellSize
+            #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
 class Pacman(Layout):
         
     def __init__(self, pScreen, mArray, cStack):
