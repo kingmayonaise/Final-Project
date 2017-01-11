@@ -316,10 +316,10 @@ class MazeGame(App):
         super().__init__(width, height)
         bg_asset = RectangleAsset(width-1, height-1, thinline, white)
         bg = Sprite(bg_asset, (0,0))
+        newMaze = Maze(1)
         
-    def step(self):
+    def step1(self):
         gState='Play'
-        print ('init')
         while gState=='Play':
             incGlobals()       
             #pygame.init()        
@@ -337,7 +337,7 @@ class MazeGame(App):
             #screen.blit(background, (0, 0))
             #pygame.display.flip()
             #clock = pygame.time.Clock()
-            while 1:
+            #while 1:
                 #clock.tick(2)
                 #screen.blit(background, (0, 0))
                 #for event in pygame.event.get():
@@ -347,16 +347,16 @@ class MazeGame(App):
                 #        myPacman.update(event.key)
                 #    elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 #        return
-                if myPacman.getState() =='Playing':
-                    newMaze.checkCollisions()
+                #if myPacman.getState() =='Playing':
+                #    newMaze.checkCollisions()
                 
-                newMaze.draw(screen)
+                #newMaze.draw(screen)
                 #pygame.display.flip()
-                if myPacman.getState()=='Won':
+                #if myPacman.getState()=='Won':
                     #pygame.display.quit()
                     #pygame.quit()
-                    break
-                else:
+                    #break
+                #else:
                     break
                 
             break
