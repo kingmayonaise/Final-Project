@@ -26,7 +26,7 @@ aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
 aBubble    = CircleAsset(cCellSize/4,noline,blue)
 aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,green)
-aRunner    = CircleAsset(cCellSize/2,noline,yellow)
+aRunner    = CircleAsset(cCellSize/2-1,noline,yellow)
     
 def incGlobals():
     global cLevel
@@ -138,11 +138,11 @@ class Maze(Layout):
             else:
                 self.currentCell = self.cellStack.pop()
         
-        print(cLeveli)        
         for i in range(cLeveli):
             
             ghost1=Ghost(self.mScreen,self.getMazeArray(), self.getCellStack())
-            self.addGhost(ghost1)
+            print(ghost1)
+            self.ghostArray.append(ghost1)
         
         self.drawBubbles()
         
@@ -154,17 +154,19 @@ class Maze(Layout):
             Sprite(aBubble, (dx,dy))
             #pygame.draw.circle(self.sLayer, (0,0,255,200), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/4)
 
-    def drawGhosts(self):
+    def runGhosts(self):
+        print('before run')
         for g in self.ghostArray:
-            gCell=g.myLocation()
-            dx = int(gCell % self.dimX)*self.cellSize
-            dy = int(gCell / self.dimX)*self.cellSize
-            #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
+            print('inside run')
+            print (self.ghostArray)
+            print(g)
+            g.update()
+        #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
             
     def drawRunner(self):
-        pCell=self.Runner.myLocation()
-        dx = int(pCell % self.dimX)*self.cellSize
-        dy = int(pCell / self.dimX)*self.cellSize
+        
+        dx = int(self.currentCell % self.dimX)*self.cellSize
+        dy = int(self.currentCell / self.dimX)*self.cellSize
         if self.Runner.getState()=='Playing':
             pass
             #pygame.draw.circle(self.sLayer, (250,240,0,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
@@ -182,9 +184,6 @@ class Maze(Layout):
     def getCellStack(self):
         return self.cellStack[:]
     
-    def addGhost(self, pGhost):
-        self.ghostArray.append(pGhost)
-
     def addRunner(self, pRunner):
         self.Runner=pRunner
 
@@ -282,6 +281,9 @@ class Runner(Layout):
         self.mazeArray = mArray
         self.cellStack=cStack
         self.state='Playing'
+        dx = int(self.currentCell % self.dimX)*self.cellSize+self.cellSize/2
+        dy = int(self.currentCell / self.dimX)*self.cellSize+self.cellSize/2
+        self.rImage=Sprite(aRunner, (dx, dy))
         
     def update(self, uDirection):
         
@@ -345,24 +347,35 @@ class MazeGame(App):
 
     def __init__(self, width, height):
         super().__init__(width, height)
+        self.startRun()
+        
+        
+    def startRun(self):
         incGlobals()
         newMaze = Maze(1)
+        myRunner=Runner(1,newMaze.getMazeArray(), newMaze.getCellStack())
+        newMaze.addRunner(myRunner)
+        newMaze.runGhosts()
 
-    def step1(self):
+
+    def step(self):
         gState='Play'
-        while gState=='Play':
-            incGlobals()       
+        print ('step')
+        newMaze.runGhosts()
+        
+        #while gState=='Play':
+            #incGlobals()       
             #pygame.init()        
-            screen = 1 #pygame.display.set_mode((cWidth*cCellSize, cHeight*cCellSize))
+            #screen = 1 #pygame.display.set_mode((cWidth*cCellSize, cHeight*cCellSize))
             #pygame.display.set_caption('Labyrinth: level '+str(cLeveli))
             #pygame.mouse.set_visible(0)
             #background = pygame.Surface(screen.get_size())
             #background = background.convert()
             #background.fill((255, 255, 255))
             
-            newMaze = Maze(screen)
-            myRunner=Runner(screen,newMaze.getMazeArray(), newMaze.getCellStack())
-            newMaze.addRunner(myRunner)
+            #newMaze = Maze(screen)
+            #myRunner=Runner(screen,newMaze.getMazeArray(), newMaze.getCellStack())
+            #newMaze.addRunner(myRunner)
         
             #screen.blit(background, (0, 0))
             #pygame.display.flip()
