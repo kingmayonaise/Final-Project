@@ -315,6 +315,7 @@ class MazeGame(App):
         super().__init__(width, height)
         bg_asset = RectangleAsset(width-1, height-1, thinline, white)
         bg = Sprite(bg_asset, (0,0))
+        Sprite(aCellWallH, 0,0)
         
     def step(self):
         gState='Play'
