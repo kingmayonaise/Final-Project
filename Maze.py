@@ -85,8 +85,9 @@ class Maze(Layout):
                 self.mazeArray.append(0)
                 if ( y == 0 ):
                     for yi in range(self.dimY):
-                        Sprite(aCellWallV,(x*self.cellSize, yi*self.cellSize))
+                        self.mazeDict['V:'+str(x)+':'+str(yi)]=Sprite(aCellWallV,(x*self.cellSize, yi*self.cellSize))
                     #pygame.draw.line(self.mLayer, (0,0,0,255), (x*self.cellSize,0), (x*self.cellSize,self.dimY*self.cellSize))
+        print (self.mazeDict)
         while(self.visitedCells < self.totalCells):
             x = int(self.currentCell % self.dimX)
             y = int(self.currentCell / self.dimX)
