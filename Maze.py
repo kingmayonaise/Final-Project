@@ -77,7 +77,8 @@ class Maze(Layout):
         self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
         
         for y in range(self.dimY): # 80 wide + 60 tall
-            Sprite(aCellWallH,0, y*self.cellSize)
+            print('Maze init')
+            Sprite(aCellWallH,(0, y*self.cellSize))
             #pygame.draw.line(self.mLayer, (0,0,0,255), (0, y*self.cellSize), (self.dimX*self.cellSize, y*self.cellSize))
             for x in range(self.dimX):
                 self.mazeArray.append(0)
@@ -315,10 +316,10 @@ class MazeGame(App):
         super().__init__(width, height)
         bg_asset = RectangleAsset(width-1, height-1, thinline, white)
         bg = Sprite(bg_asset, (0,0))
-        Sprite(aCellWallH, 0,0)
         
     def step(self):
         gState='Play'
+        print ('init')
         while gState=='Play':
             incGlobals()       
             #pygame.init()        
