@@ -140,6 +140,7 @@ class Maze(Layout):
         for i in range(cLeveli):     
             ghost1=Ghost(self.mScreen,self.getMazeArray(), self.getCellStack())
             self.addGhost(ghost1)
+        self.drawBubbles()
         
     def drawBubbles(self):
         for bubbleCell in self.bubbleArray:
