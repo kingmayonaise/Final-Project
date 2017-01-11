@@ -73,12 +73,13 @@ class Maze(Layout):
         self.visitedCells = 1
         self.score=0
         self.mScreen=pScreen
+        self.mazeDict={}
         
         self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
         
         for y in range(self.dimY): # 80 wide + 60 tall
             for x in range(self.dimX):
-                Sprite(aCellWallH,(x*self.cellSize, y*self.cellSize))
+                self.mazeDict['H:'+str(x)+':'+str(y)]=Sprite(aCellWallH,(x*self.cellSize, y*self.cellSize))
             #pygame.draw.line(self.mLayer, (0,0,0,255), (0, y*self.cellSize), (self.dimX*self.cellSize, y*self.cellSize))
             for x in range(self.dimX):
                 self.mazeArray.append(0)
