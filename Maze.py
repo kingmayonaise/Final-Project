@@ -87,7 +87,6 @@ class Maze(Layout):
                     for yi in range(self.dimY):
                         self.mazeDict['V:'+str(x)+':'+str(yi)]=Sprite(aCellWallV,(x*self.cellSize, yi*self.cellSize))
                     #pygame.draw.line(self.mLayer, (0,0,0,255), (x*self.cellSize,0), (x*self.cellSize,self.dimY*self.cellSize))
-        print (self.mazeDict)
         while(self.visitedCells < self.totalCells):
             x = int(self.currentCell % self.dimX)
             y = int(self.currentCell / self.dimX)
@@ -111,12 +110,19 @@ class Maze(Layout):
                     #pygame.draw.line(self.mLayer, (0,0,0,0), (dx,dy+1),(dx,dy+self.cellSize-1))
                 elif direction & 2:
                     self.mazeArray[nidx] |= (8)
+                    self.mazeDict['H:'+str(x)+':'+str(y+1)].destroy()
+                    del self.mazeDict['H:'+str(x)+':'+str(y+1)]
                     #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy+self.cellSize),(dx+self.cellSize-1,dy+self.cellSize))
                 elif direction & 4:
                     self.mazeArray[nidx] |= (1)
+                    self.mazeDict['V:'+str(x+1)+':'+str(y)].destroy()
+                    del self.mazeDict['V:'+str(x+1)+':'+str(y)]
                     #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+self.cellSize,dy+1),(dx+self.cellSize,dy+self.cellSize-1))
                 elif direction & 8:
                     self.mazeArray[nidx] |= (2)
+                    self.mazeDict['H:'+str(x)+':'+str(y)].destroy()
+                    del self.mazeDict['H:'+str(x)+':'+str(y)]
+                    
                     #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy),(dx+self.cellSize-1,dy))
                 self.mazeArray[self.currentCell] |= direction
                 self.cellStack.append(self.currentCell)
@@ -319,7 +325,7 @@ class MazeGame(App):
 
     def __init__(self, width, height):
         super().__init__(width, height)
-        bg_asset = RectangleAsset(width-1, height-1, thinline, white)
+        bg_asset = RectangleAsset(cWidth, cHeight, thinline, white)
         bg = Sprite(bg_asset, (0,0))
         newMaze = Maze(1)
         
