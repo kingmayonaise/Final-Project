@@ -77,6 +77,10 @@ class Maze(Layout):
         
         self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
         
+        bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
+        bg = Sprite(bg_asset, (0,0))
+
+        
         for y in range(self.dimY): # 80 wide + 60 tall
             for x in range(self.dimX):
                 self.mazeDict['H:'+str(x)+':'+str(y)]=Sprite(aCellWallH,(x*self.cellSize, y*self.cellSize))
@@ -325,8 +329,6 @@ class MazeGame(App):
 
     def __init__(self, width, height):
         super().__init__(width, height)
-        bg_asset = RectangleAsset(cWidth, cHeight, thinline, white)
-        bg = Sprite(bg_asset, (0,0))
         newMaze = Maze(1)
         
     def step1(self):
