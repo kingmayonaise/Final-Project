@@ -299,7 +299,7 @@ class Runner(Layout):
         
         neighbors = []
         directions = self.mazeArray[self.currentCell] & 0xF
-        for i in xrange(4):
+        for i in range(4):
             if (directions & (1<<i)) > 0:
                 nx = x + self.compass[i][0]
                 ny = y + self.compass[i][1]
@@ -361,14 +361,14 @@ class MazeGame(App):
         commands = ["left", "right", "up", "down"]
         self.keymap = dict(zip(keys, commands))
         [self.listenKeyEvent("keydown", k, self.runnerRuns) for k in keys]
-        [self.listenKeyEvent("keyup", k, self.controlup) for k in keys]
+        #[self.listenKeyEvent("keyup", k, self.controlup) for k in keys]
         
     def startRun(self):
         
         incGlobals()
         self.newMaze = Maze()
-        myRunner=Runner(self.newMaze.getMazeArray(), self.newMaze.getCellStack())
-        self.newMaze.addRunner(myRunner)
+        self.myRunner=Runner(self.newMaze.getMazeArray(), self.newMaze.getCellStack())
+        self.newMaze.addRunner(self.myRunner)
 
     def step(self):
         self.steps+=1
@@ -376,7 +376,6 @@ class MazeGame(App):
             self.newMaze.runGhosts()
             
     def runnerRuns(self, evt):
-        print(self.keymap[evt.key])
         self.myRunner.update(self.keymap[evt.key])
         evt.consumed=True
         
