@@ -312,7 +312,7 @@ class MazeGame(App):
 
     def __init__(self, width, height):
         super().__init__(width, height)
-        bg_asset = RectangleAsset(width, height, noline, black)
+        bg_asset = RectangleAsset(width, height, thinline, white)
         bg = Sprite(bg_asset, (0,0))
         
     def step(self):
