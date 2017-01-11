@@ -25,8 +25,7 @@ cCellSize=16
 aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
 aBubble    = CircleAsset(cCellSize/4,noline,blue)
-aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,green)
-
+aGhost     = RectangleAsset(cCellSize/2,cCellSize,noline,green)
     
 def incGlobals():
     global cLevel
@@ -79,6 +78,7 @@ class Maze(Layout):
         self.mazeDict={}
         
         self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
+        print (self.bubbleArray)
         
         bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
         bg = Sprite(bg_asset, (0,0))
@@ -146,9 +146,10 @@ class Maze(Layout):
         
     def drawBubbles(self):
         for bubbleCell in self.bubbleArray:
-            dx = (bubbleCell % self.dimX)*self.cellSize
-            dy = (bubbleCell / self.dimX)*self.cellSize
-            Sprite(aBubble, (dx+self.cellSize/2,dy+self.cellSize/2))
+            
+            dx = int(bubbleCell % self.dimX)*self.cellSize+self.cellSize/2
+            dy = int(bubbleCell / self.dimX)*self.cellSize+self.cellSize/2
+            Sprite(aBubble, (dx,dy))
             #pygame.draw.circle(self.sLayer, (0,0,255,200), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/4)
 
     def drawGhosts(self):
@@ -227,19 +228,15 @@ class Ghost(Layout):
         super(Ghost,self).__init__(pScreen)
         self.mazeArray = mArray
         self.cellStack=cStack
-
-        dx = (self.currentCell % self.dimX)*self.cellSize
-        dy = (self.currentCell / self.dimX)*self.cellSize
-
-        self.gImage=Sprite(aGhost,(dx+self.cellSize/4,dy+self.cellSize/4))
+        self.gImage=Sprite()
         
     def update(self):
         if self.currentCell == (self.totalCells-1): # have we reached the exit?            
             return
         moved = False
         while(moved == False):
-            x = self.currentCell % self.dimX
-            y = self.currentCell / self.dimX
+            x = int(self.currentCell % self.dimX)
+            y = int(self.currentCell / self.dimX)
             neighbors = []
             directions = self.mazeArray[self.currentCell] & 0xF
             for i in range(4):
@@ -269,10 +266,10 @@ class Ghost(Layout):
                 self.mazeArray[self.currentCell] &= 0xF0FF # not a solution
                 self.currentCell = self.cellStack.pop()
                                 
-        x = (self.currentCell % self.dimX)*self.cellSize
-        y = (self.currentCell / self.dimX)*self.cellSize
-        self.gImage.position(((x+self.cellSize/4,y+self.cellSize/4))
-
+    def draw(self):
+            dx = (self.currentCell % self.dimX)*self.cellSize
+            dy = (self.currentCell / self.dimX)*self.cellSize
+            #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
 class Pacman(Layout):
         
     def __init__(self, pScreen, mArray, cStack):
