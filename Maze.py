@@ -25,7 +25,7 @@ cCellSize=16
 aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
 aBubble    = CircleAsset(cCellSize/4,noline,blue)
-aGhost     = RectangleAsset(cCellSize/2,noline,green)
+aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,green)
 
     
 def incGlobals():
