@@ -83,7 +83,8 @@ class Maze(Layout):
             for x in range(self.dimX):
                 self.mazeArray.append(0)
                 if ( y == 0 ):
-                    pass
+                    for yi in range(self.dimY):
+                        Sprite(aCellWallV,(x*self.cellSize, yi*self.cellSize))
                     #pygame.draw.line(self.mLayer, (0,0,0,255), (x*self.cellSize,0), (x*self.cellSize,self.dimY*self.cellSize))
         while(self.visitedCells < self.totalCells):
             x = int(self.currentCell % self.dimX)
@@ -356,10 +357,6 @@ class MazeGame(App):
                     #pygame.display.quit()
                     #pygame.quit()
                     #break
-                #else:
-                    break
-                
-            break
 
 myapp = MazeGame(600,600)
 myapp.run()
