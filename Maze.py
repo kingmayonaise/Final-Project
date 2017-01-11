@@ -107,6 +107,7 @@ class Maze(Layout):
                 if direction & 1:
                     self.mazeArray[nidx] |= (4)
                     self.mazeDict['V:'+str(x)+':'+str(y)].destroy()
+                    del self.mazeDict['V:'+str(x)+':'+str(y)]
                     #pygame.draw.line(self.mLayer, (0,0,0,0), (dx,dy+1),(dx,dy+self.cellSize-1))
                 elif direction & 2:
                     self.mazeArray[nidx] |= (8)
