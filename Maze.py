@@ -24,8 +24,8 @@ cCellSize=16
 
 aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
-aBubble    = CircleAsset(cCellSize/4,thinline,blue)
-aGhost     = RectangleAssset()
+aBubble    = CircleAsset(cCellSize/4,noline,blue)
+aGhost     = RectangleAsset(cCellSize/2,noline,green)
 
     
 def incGlobals():
@@ -227,7 +227,11 @@ class Ghost(Layout):
         super(Ghost,self).__init__(pScreen)
         self.mazeArray = mArray
         self.cellStack=cStack
-        self.gImage=Sprite()
+
+        dx = (self.currentCell % self.dimX)*self.cellSize
+        dy = (self.currentCell / self.dimX)*self.cellSize
+
+        self.gImage=Sprite(aGhost,(dx+self.cellSize/4,dy+self.cellSize/4))
         
     def update(self):
         if self.currentCell == (self.totalCells-1): # have we reached the exit?            
