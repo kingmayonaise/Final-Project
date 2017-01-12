@@ -166,6 +166,7 @@ class Maze():
             print ('lost')
 
         if len(self.Runner.collidingWithSprites(Trophy))>0:
+            print(1)
             self.score +=1
             self.bubbleArray.remove(pCell)
             if len(self.bubbleArray)==0:
