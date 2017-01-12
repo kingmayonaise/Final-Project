@@ -13,11 +13,6 @@ noline=LineStyle(0,white)
 
 cCellSize=16
 
-aCellWallH = LineAsset(cCellSize,0,thinline)
-aCellWallV = LineAsset(0,cCellSize,thinline)
-aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,red)
-aRunner    = CircleAsset(cCellSize/2-2,noline,yellow)
-
 compass = [(-1,0),(0,1),(1,0),(0,-1)]
 
 cLevel=0.0
@@ -63,6 +58,8 @@ class Maze():
         self.currentCell = 0       
         self.bubbleArray=random.sample(range(1, cTotalCells-1), 1)
         self.trophyArray=[]
+        aCellWallH = LineAsset(cCellSize,0,thinline)
+        aCellWallV = LineAsset(0,cCellSize,thinline)
 
         bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
         self.bg = Sprite(bg_asset, (0,0))
@@ -124,9 +121,16 @@ class Maze():
             
             
     def runGhosts(self):
+        i=0
         for g in self.ghostArray:
             g.update()
-
+            if g.myLocation()==cTotalCells-1:
+                g.destroy()
+                self.ghostArray.append(Ghost(self.getMazeArray(), self.getCellStack()))
+                print ('deleting')
+                del self.ghostArray[i]
+                print('deleted')
+            i+=1
             
     def getMazeArray(self):
         return self.mazeArray[:]
@@ -168,8 +172,9 @@ class Ghost(Sprite):
     def __init__(self,mArray, cStack):
         self.mazeArray = mArray
         self.cellStack=cStack
+        
         self.currentCell = random.randint(0, cTotalCells-1)
-
+        aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,red)
         dx = int(self.currentCell % cWidth)*cCellSize+int(cCellSize/4)
         dy = int(self.currentCell / cWidth)*cCellSize+int(+cCellSize/4)
         super().__init__(aGhost, (dx, dy))
@@ -225,10 +230,13 @@ class Runner(Sprite):
     def __init__(self, mArray, cStack):
         self.mazeArray = mArray
         self.cellStack=cStack
+        
         self.state='Playing'
         self.currentCell = random.randint(0, cTotalCells-1)        
         dx = int(self.currentCell % cWidth)*cCellSize+cCellSize/2
         dy = int(self.currentCell / cWidth)*cCellSize+cCellSize/2
+        
+        aRunner    = CircleAsset(cCellSize/2-2,noline,yellow)
         super().__init__(aRunner, (dx, dy))
 
         
@@ -293,9 +301,6 @@ class Runner(Sprite):
 
     def setState(self,pState):
         self.state=pState
-        
-    def getSprite(self):
-        return self.rImage
 
     def myLocation(self):
         return self.currentCell
