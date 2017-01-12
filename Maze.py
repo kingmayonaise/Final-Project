@@ -61,11 +61,11 @@ class Maze():
         self.score=0
         self.mazeDict={}
         self.currentCell = 0       
-        self.trophyArray=random.sample(range(1, cTotalCells-1), 1)
-        self.trophyDict={}
+        self.bubbleArray=random.sample(range(1, cTotalCells-1), 1)
+        self.trophyArray=[]
 
         bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
-        bg = Sprite(bg_asset, (0,0))
+        self.bg = Sprite(bg_asset, (0,0))
 
         
         for y in range(cHeight):
@@ -117,12 +117,10 @@ class Maze():
                 self.currentCell = self.cellStack.pop()
         
         for i in range(cLeveli):
-            self.ghost1=Ghost(self.getMazeArray(), self.getCellStack())
-            self.ghostArray.append(self.ghost1)
+            self.ghostArray.append(Ghost(self.getMazeArray(), self.getCellStack()))
             
-
-        for tCell in self.trophyArray:
-            self.trophyDict[tCell]=Trophy (tCell)
+        for tCell in self.bubbleArray:
+            self.trophyArray.append(Trophy(tCell))
             
             
     def runGhosts(self):
@@ -143,22 +141,24 @@ class Maze():
 
         if len(self.Runner.collidingWithSprites(Ghost))>0:
             self.Runner.setState('Lost')
-
-        if len(self.Runner.collidingWithSprites(Trophy))>0:
-            self.score +=1
-            self.trophyArray.remove(self.Runner.myLocation())
-            self.trophyDict[self.Runner.myLocation()].destroy()
-            del self.trophyDict[self.Runner.myLocation()]
-            if len(self.trophyArray)==0:
-                self.Runner.setState('Won')
+        
+        
+        trophies=self.Runner.collidingWithSprites(Trophy)
+        if len(trophies)>0:
+            for t in trophies:
+                self.score +=1
+                t.destroy()
+                self.bubbleArray.pop()
+                if len(self.bubbleArray)==0:
+                    self.Runner.setState('Won')
             
             
     def selfDestruct(self):
+        self.bg.destroy()
         #for t in self.trophyDict:
         #    self.
         for k in self.mazeDict:
             self.mazeDict[k].destroy()
-        
         for g in self.ghostArray:
             g.destroy()
 
@@ -326,6 +326,7 @@ class MazeGame(App):
         self.newMaze.checkCollisions()
         if self.myRunner.getState()=='Won':
             self.newMaze.selfDestruct()
+            self.myRunner.destroy()
             
     def runnerRuns(self, evt):
         self.myRunner.update(self.keymap[evt.key])
