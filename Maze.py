@@ -144,21 +144,14 @@ class Maze():
         
         
         trophies=self.Runner.collidingWithSprites(Trophy)
-        print(1)
-        print ('level: '+str(cLeveli))
         if len(trophies)>0:
-            print(2)
             for t in trophies:
                 self.score +=1
-                print(3)
                 t.destroy()
-                print(4)
                 self.bubbleArray.pop()
-                print(5)
                 if len(self.bubbleArray)==0:
-                    print(6)
                     self.Runner.setState('Won')
-                    print(7)
+
             
             
     def selfDestruct(self):
