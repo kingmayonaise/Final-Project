@@ -44,6 +44,12 @@ def incGlobals():
     cHeight=int(round(9*(1+cLevel*0.4),0))
     cTotalCells=cWidth*cHeight
 
+class Trophy(Sprite):
+        
+    def __init__(self,trophyCell):
+        x = int(trophyCell % cWidth)*cCellSize+cCellSize/2
+        y = int(trophyCell / cWidth)*cCellSize+cCellSize/2
+        super().__init__(aBubble, (x, y))
 
 class Maze():
     
@@ -118,18 +124,12 @@ class Maze():
                 self.currentCell = self.cellStack.pop()
         
         for i in range(cLeveli):
-            
             self.ghost1=Ghost(self.getMazeArray(), self.getCellStack())
             self.ghostArray.append(self.ghost1)
         
-        self.drawBubbles()
-        
-    def drawBubbles(self):
+
         for bubbleCell in self.bubbleArray:
-            
-            dx = int(bubbleCell % cWidth)*cCellSize+cCellSize/2
-            dy = int(bubbleCell / cWidth)*cCellSize+cCellSize/2
-            Sprite(aBubble, (dx,dy))
+            Trophy (dx,dy)
             
             
     def runGhosts(self):
