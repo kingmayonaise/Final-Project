@@ -45,11 +45,12 @@ def incGlobals():
 
 
 class Layout(object):
+    compass = [(-1,0),(0,1),(1,0),(0,-1)]
+    
     def __init__(self):
         self.dimX=cWidth #20 #40
         self.dimY=cHeight #10 #30
         self.cellSize=cCellSize
-        self.compass = [(-1,0),(0,1),(1,0),(0,-1)]
         self.totalCells = self.dimX*self.dimY # 40 * 30
         #self.mLayer = pygame.Surface(pScreen.get_size())
         #self.mLayer = self.mLayer.convert_alpha()
@@ -199,10 +200,14 @@ class Maze(Layout):
     def checkCollisions(self):
         runnerSprite=self.Runner.getSprite()
         ghostSprite=self.ghost1.getSprite()
-        print(len(runnerSprite.collidingWith(ghostSprite)))
-        return
+        
+        if runnerSprite.collidingWith(ghostSprite):
+            print ('collding')
+        else:
+            print ('lucky')
+ 
     
-        self.ghostLocations=[]
+        """self.ghostLocations=[]
         ghostLocation=0
         pCell=self.Runner.myLocation()
 
@@ -225,7 +230,7 @@ class Maze(Layout):
             self.bubbleArray.remove(pCell)
             if len(self.bubbleArray)==0:
                 self.Runner.setState('Won')
-
+        """
 class Ghost(Layout):
         
     def __init__(self,mArray, cStack):
