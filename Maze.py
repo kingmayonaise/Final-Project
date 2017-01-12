@@ -116,7 +116,7 @@ class Maze():
             else:
                 self.currentCell = self.cellStack.pop()
         
-        for i in range(cLeveli+1):
+        for i in range(cLeveli):
             self.ghost1=Ghost(self.getMazeArray(), self.getCellStack())
             self.ghostArray.append(self.ghost1)
             
@@ -151,10 +151,11 @@ class Maze():
             del self.trophyDict[self.Runner.myLocation()]
             if len(self.trophyArray)==0:
                 self.Runner.setState('Won')
-            print ('won')
             
             
     def selfDestruct(self):
+        #for t in self.trophyDict:
+        #    self.
         for k in self.mazeDict:
             self.mazeDict[k].destroy()
         
