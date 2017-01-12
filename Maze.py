@@ -56,14 +56,13 @@ class Maze():
     def __init__(self):
         self.mazeArray = []
         self.ghostArray=[]
-        self.ghostLocations=[]
-        self.bubbleArray=[]
         self.cellStack = []
         self.visitedCells = 1
         self.score=0
         self.mazeDict={}
         self.currentCell = 0       
-        self.bubbleArray=random.sample(range(1, cTotalCells-1), 1)
+        self.trophyArray=random.sample(range(1, cTotalCells-1), 1)
+        self.trophyDict={}
 
         bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
         bg = Sprite(bg_asset, (0,0))
@@ -122,8 +121,8 @@ class Maze():
             self.ghostArray.append(self.ghost1)
         
 
-        for bubbleCell in self.bubbleArray:
-            Trophy (bubbleCell)
+        for tCell in self.trophyArray:
+            self.trophyDict[tCell]=Trophy (tCell)
             
             
     def runGhosts(self):
@@ -168,8 +167,11 @@ class Maze():
         if len(self.Runner.collidingWithSprites(Trophy))>0:
             print(1)
             self.score +=1
-            self.bubbleArray.remove(pCell)
-            if len(self.bubbleArray)==0:
+            self.trophyArray.remove(self.Runner.myLocation())
+            self.trophyDict[self.Runner.myLocation()].destroy()
+            del self.trophyDict[self.Runner.myLocation()]
+            print(2)
+            if len(self.trophyArray)==0:
                 self.Runner.setState('Won')
             print ('won')
             
