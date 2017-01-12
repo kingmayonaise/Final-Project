@@ -177,7 +177,8 @@ class Maze():
         #screen.blit(self.mLayer, (0,0))
         
     def checkCollisions(self):
-        runnerSprite=self.Runner.getSprite()
+        pass
+        """runnerSprite=self.Runner.getSprite()
         ghostSprite=self.ghost1.getSprite()
         
         if runnerSprite.collidingWith(ghostSprite):
@@ -186,7 +187,7 @@ class Maze():
             print ('lucky')
  
     
-        """self.ghostLocations=[]
+        self.ghostLocations=[]
         ghostLocation=0
         pCell=self.Runner.myLocation()
 
@@ -210,17 +211,17 @@ class Maze():
             if len(self.bubbleArray)==0:
                 self.Runner.setState('Won')
         """
-class Ghost():
+class Ghost(Sprite):
         
     def __init__(self,mArray, cStack):
         self.mazeArray = mArray
         self.cellStack=cStack
         self.currentCell = random.randint(0, cTotalCells-1)
-        
+
         dx = int(self.currentCell % cWidth)*cCellSize+int(cCellSize/4)
         dy = int(self.currentCell / cWidth)*cCellSize+int(+cCellSize/4)
-        self.gImage=Sprite(aGhost,(dx,dy))
-        
+        super().__init__(aGhost, (dx, dy))
+
 
 
     def update(self):
@@ -262,11 +263,9 @@ class Ghost():
                                 
         dx = int(self.currentCell % cWidth)*cCellSize+int(cCellSize/4)
         dy = int(self.currentCell / cWidth)*cCellSize+int(+cCellSize/4)
-        self.gImage.x=dx
-        self.gImage.y=dy
+        self.x=dx
+        self.y=dy
         
-    def getSprite(self):
-        return self.gImage
         
     def myLocation(self):
         return self.currentCell
