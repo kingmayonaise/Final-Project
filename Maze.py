@@ -165,12 +165,10 @@ class Maze():
             print ('lost')
 
         if len(self.Runner.collidingWithSprites(Trophy))>0:
-            print(1)
             self.score +=1
             self.trophyArray.remove(self.Runner.myLocation())
             self.trophyDict[self.Runner.myLocation()].destroy()
             del self.trophyDict[self.Runner.myLocation()]
-            print(2)
             if len(self.trophyArray)==0:
                 self.Runner.setState('Won')
             print ('won')
@@ -340,6 +338,8 @@ class MazeGame(App):
         if ((self.steps % 25) == 0):
             self.newMaze.runGhosts()
         self.newMaze.checkCollisions()
+        if self.myRunner.getState=='Won':
+            self.newMaze.selfDestruct()
             
     def runnerRuns(self, evt):
         self.myRunner.update(self.keymap[evt.key])
