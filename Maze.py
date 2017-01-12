@@ -16,7 +16,7 @@ cCellSize=16
 aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
 aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,red)
-aRunner    = CircleAsset(cCellSize/2-1,noline,yellow)
+aRunner    = CircleAsset(cCellSize/2-2,noline,yellow)
 
 compass = [(-1,0),(0,1),(1,0),(0,-1)]
 
@@ -145,6 +145,7 @@ class Maze():
         
         trophies=self.Runner.collidingWithSprites(Trophy)
         print(1)
+        print ('level: '+str(cLeveli))
         if len(trophies)>0:
             print(2)
             for t in trophies:
