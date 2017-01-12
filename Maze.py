@@ -69,16 +69,14 @@ class Maze():
         bg = Sprite(bg_asset, (0,0))
 
         
-        for y in range(cHeight): # 80 wide + 60 tall
+        for y in range(cHeight):
             for x in range(cWidth):
                 self.mazeDict['H:'+str(x)+':'+str(y)]=Sprite(aCellWallH,(x*cCellSize, y*cCellSize))
-            #pygame.draw.line(self.mLayer, (0,0,0,255), (0, y*cCellSize), (cWidth*cCellSize, y*cCellSize))
             for x in range(cWidth):
                 self.mazeArray.append(0)
                 if ( y == 0 ):
                     for yi in range(cHeight):
                         self.mazeDict['V:'+str(x)+':'+str(yi)]=Sprite(aCellWallV,(x*cCellSize, yi*cCellSize))
-                    #pygame.draw.line(self.mLayer, (0,0,0,255), (x*cCellSize,0), (x*cCellSize,cHeight*cCellSize))
         while(self.visitedCells < cTotalCells):
             x = int(self.currentCell % cWidth)
             y = int(self.currentCell / cWidth)
@@ -99,23 +97,19 @@ class Maze():
                     self.mazeArray[nidx] |= (4)
                     self.mazeDict['V:'+str(x)+':'+str(y)].destroy()
                     del self.mazeDict['V:'+str(x)+':'+str(y)]
-                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx,dy+1),(dx,dy+cCellSize-1))
                 elif direction & 2:
                     self.mazeArray[nidx] |= (8)
                     self.mazeDict['H:'+str(x)+':'+str(y+1)].destroy()
                     del self.mazeDict['H:'+str(x)+':'+str(y+1)]
-                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy+cCellSize),(dx+cCellSize-1,dy+cCellSize))
                 elif direction & 4:
                     self.mazeArray[nidx] |= (1)
                     self.mazeDict['V:'+str(x+1)+':'+str(y)].destroy()
                     del self.mazeDict['V:'+str(x+1)+':'+str(y)]
-                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+cCellSize,dy+1),(dx+cCellSize,dy+cCellSize-1))
                 elif direction & 8:
                     self.mazeArray[nidx] |= (2)
                     self.mazeDict['H:'+str(x)+':'+str(y)].destroy()
                     del self.mazeDict['H:'+str(x)+':'+str(y)]
                     
-                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy),(dx+cCellSize-1,dy))
                 self.mazeArray[self.currentCell] |= direction
                 self.cellStack.append(self.currentCell)
                 self.currentCell = nidx
@@ -177,6 +171,11 @@ class Maze():
             if len(self.bubbleArray)==0:
                 self.Runner.setState('Won')
             print ('won')
+            
+            
+    def selfDestruct(self):
+        for k in self.mazeDict:
+            self.mazeDict[k].destroy()
 
 class Ghost(Sprite):
         
@@ -231,10 +230,7 @@ class Ghost(Sprite):
         dy = int(self.currentCell / cWidth)*cCellSize+int(+cCellSize/4)
         self.x=dx
         self.y=dy
-        
-        
-    def myLocation(self):
-        return self.currentCell
+    
         
 class Runner(Sprite):
         
