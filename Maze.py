@@ -129,7 +129,7 @@ class Maze():
         
 
         for bubbleCell in self.bubbleArray:
-            Trophy (dx,dy)
+            Trophy (bubbleCell)
             
             
     def runGhosts(self):
