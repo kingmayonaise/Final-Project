@@ -15,7 +15,6 @@ cCellSize=16
 
 aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
-aBubble    = CircleAsset(cCellSize/4,noline,blue)
 aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,red)
 aRunner    = CircleAsset(cCellSize/2-1,noline,yellow)
 
@@ -49,6 +48,7 @@ class Trophy(Sprite):
     def __init__(self,trophyCell):
         x = int(trophyCell % cWidth)*cCellSize+cCellSize/2
         y = int(trophyCell / cWidth)*cCellSize+cCellSize/2
+        aBubble    = CircleAsset(cCellSize/4,noline,blue)
         super().__init__(aBubble, (x, y))
 
 class Maze():
@@ -116,38 +116,19 @@ class Maze():
             else:
                 self.currentCell = self.cellStack.pop()
         
-        for i in range(cLeveli):
+        for i in range(cLeveli+1):
             self.ghost1=Ghost(self.getMazeArray(), self.getCellStack())
             self.ghostArray.append(self.ghost1)
-        
+            
 
         for tCell in self.trophyArray:
             self.trophyDict[tCell]=Trophy (tCell)
             
             
     def runGhosts(self):
-        self.ghost1.update()
-        #for g in self.ghostArray:
-        #print('inside run')
-        #    print (self.ghostArray)
-        #    print(g)
-            #g.update()
-        #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+cCellSize/4,dy+cCellSize/4,cCellSize/2,cCellSize/2))
-            
-    def drawRunner(self):
-        
-        dx = int(self.currentCell % cWidth)*cCellSize
-        dy = int(self.currentCell / cWidth)*cCellSize
-        if self.Runner.getState()=='Playing':
-            pass
-            #pygame.draw.circle(self.sLayer, (250,240,0,250), (dx+cCellSize/2,dy+cCellSize/2),cCellSize/2-1)
-        elif self.Runner.getState()=='Lost':
-            pass
-            #pygame.draw.circle(self.sLayer, (211,211,211,250), (dx+cCellSize/2,dy+cCellSize/2),cCellSize/2-1)
-        elif self.Runner.getState()=='Won':
-            pass
-            #pygame.draw.circle(self.sLayer, (0,255,255,250), (dx+cCellSize/2,dy+cCellSize/2),cCellSize/2-1)
-            
+        for g in self.ghostArray:
+            g.update()
+
             
     def getMazeArray(self):
         return self.mazeArray[:]
@@ -231,6 +212,8 @@ class Ghost(Sprite):
         self.x=dx
         self.y=dy
     
+    def myLocation(self):
+        return self.currentCell
         
 class Runner(Sprite):
         
@@ -337,7 +320,7 @@ class MazeGame(App):
         if ((self.steps % 25) == 0):
             self.newMaze.runGhosts()
         self.newMaze.checkCollisions()
-        if self.myRunner.getState=='Won':
+        if self.myRunner.getState()=='Won':
             self.newMaze.selfDestruct()
             
     def runnerRuns(self, evt):
