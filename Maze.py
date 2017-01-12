@@ -162,7 +162,6 @@ class Maze():
 
         if len(self.Runner.collidingWithSprites(Ghost))>0:
             self.Runner.setState('Lost')
-            print ('lost')
 
         if len(self.Runner.collidingWithSprites(Trophy))>0:
             self.score +=1
