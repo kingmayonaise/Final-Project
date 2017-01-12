@@ -1,17 +1,18 @@
 import random
-from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, CircleAsset, PolygonAsset, Frame, KeyEvent
+from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, CircleAsset, PolygonAsset, TextAsset, Frame, KeyEvent
 
 red = Color(0xff0000, 1.0)
 green = Color(0x00ff00, 1.0)
 blue = Color(0x0000ff, 1.0)
 black = Color(0x000000, 1.0)
 white=Color(0xffffff,1.0)
-yellow=Color(0xffff00,1.0)
+yellow=Color(0xFFA500,1.0)
+
 
 thinline = LineStyle(1, black)
 noline=LineStyle(0,white)
 
-cCellSize=16
+cCellSize=20
 
 compass = [(-1,0),(0,1),(1,0),(0,-1)]
 
@@ -63,6 +64,8 @@ class Maze():
 
         bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
         self.bg = Sprite(bg_asset, (0,0))
+        
+        Sprite(TextAsset(text='Maze Runner. Level - '+str(cLeveli), width=cWidth*cCellSize, align='center',style='20px Arial', fill=Color(0xff2222,1)),(0, cHeight*cCellSize+20))
 
         
         for y in range(cHeight):
@@ -178,7 +181,7 @@ class Ghost(Sprite):
         dx = int(self.currentCell % cWidth)*cCellSize+int(cCellSize/4)
         dy = int(self.currentCell / cWidth)*cCellSize+int(+cCellSize/4)
         super().__init__(aGhost, (dx, dy))
-
+        self.rectangularCollisionModel()
 
     def update(self):
         if self.currentCell == (cTotalCells-1): # have we reached the exit?            
@@ -236,9 +239,9 @@ class Runner(Sprite):
         dx = int(self.currentCell % cWidth)*cCellSize+cCellSize/2
         dy = int(self.currentCell / cWidth)*cCellSize+cCellSize/2
         
-        aRunner    = CircleAsset(cCellSize/2-2,noline,yellow)
+        aRunner    = CircleAsset(cCellSize/2-3,noline,yellow)
         super().__init__(aRunner, (dx, dy))
-
+        self.circularCollisionModel()
         
     def update(self, uDirection):
         
@@ -332,7 +335,7 @@ class MazeGame(App):
             self.startRun()
             
         self.steps+=1
-        if ((self.steps % 25) == 0) && (self.myRunner.getState()=='Playing'):
+        if ((self.steps % 25) == 0) and (self.myRunner.getState()=='Playing'):
             self.newMaze.runGhosts()
         
         self.newMaze.checkCollisions()
