@@ -177,11 +177,9 @@ class Maze():
         #screen.blit(self.mLayer, (0,0))
         
     def checkCollisions(self):
-        pass
-        """runnerSprite=self.Runner.getSprite()
-        ghostSprite=self.ghost1.getSprite()
+
         
-        if runnerSprite.collidingWith(ghostSprite):
+        if len(self.Runner.collidingWithSprites(Ghost))>0:
             print ('collding')
         else:
             print ('lucky')
