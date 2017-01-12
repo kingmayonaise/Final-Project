@@ -144,13 +144,20 @@ class Maze():
         
         
         trophies=self.Runner.collidingWithSprites(Trophy)
+        print(1)
         if len(trophies)>0:
+            print(2)
             for t in trophies:
                 self.score +=1
+                print(3)
                 t.destroy()
+                print(4)
                 self.bubbleArray.pop()
+                print(5)
                 if len(self.bubbleArray)==0:
+                    print(6)
                     self.Runner.setState('Won')
+                    print(7)
             
             
     def selfDestruct(self):
@@ -311,6 +318,7 @@ class MazeGame(App):
         self.keymap = dict(zip(keys, commands))
         [self.listenKeyEvent("keydown", k, self.runnerRuns) for k in keys]
         #[self.listenKeyEvent("keyup", k, self.controlup) for k in keys]
+        self.state='Playing'
         
     def startRun(self):
         
@@ -320,13 +328,20 @@ class MazeGame(App):
         self.newMaze.addRunner(self.myRunner)
 
     def step(self):
+        if self.state=='New':
+            self.state='Playing'
+            self.startRun()
+            
         self.steps+=1
         if ((self.steps % 25) == 0):
             self.newMaze.runGhosts()
+        
         self.newMaze.checkCollisions()
+        
         if self.myRunner.getState()=='Won':
             self.newMaze.selfDestruct()
             self.myRunner.destroy()
+            self.state='New'
             
     def runnerRuns(self, evt):
         self.myRunner.update(self.keymap[evt.key])
