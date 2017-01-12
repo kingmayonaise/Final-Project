@@ -1,6 +1,3 @@
-#import pygame, random
-#from pygame.locals import *
-
 import random
 from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, CircleAsset, PolygonAsset, Frame, KeyEvent
 
@@ -14,12 +11,6 @@ yellow=Color(0xffff00,1.0)
 thinline = LineStyle(1, black)
 noline=LineStyle(0,white)
 
-   
-cLevel=0.0
-cLeveli=int(cLevel)
-   
-cWidth=int(round(12*(1+cLevel*0.4),0))
-cHeight=int(round(9*(1+cLevel*0.4),0))
 cCellSize=16
 
 aCellWallH = LineAsset(cCellSize,0,thinline)
@@ -27,48 +18,36 @@ aCellWallV = LineAsset(0,cCellSize,thinline)
 aBubble    = CircleAsset(cCellSize/4,noline,blue)
 aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,green)
 aRunner    = CircleAsset(cCellSize/2-1,noline,yellow)
+
+compass = [(-1,0),(0,1),(1,0),(0,-1)]
+
+cLevel=0.0
+cLeveli=int(cLevel)
+   
+cWidth=0
+cHeight=0
+cTotalCells=0
+
+
     
 def incGlobals():
     global cLevel
     global cLeveli
-    
-             
     global cWidth
     global cHeight
-    global cCellSize
-
+    global cTotalCells
+    
     cLevel+=1
     cLeveli=int(cLevel)
     
     cWidth=int(round(12*(1+cLevel*0.4),0))
     cHeight=int(round(9*(1+cLevel*0.4),0))
+    cTotalCells=cWidth*cHeight
 
 
-class Layout(object):
-    compass = [(-1,0),(0,1),(1,0),(0,-1)]
+class Maze():
     
     def __init__(self):
-        self.dimX=cWidth #20 #40
-        self.dimY=cHeight #10 #30
-        self.cellSize=cCellSize
-        self.totalCells = self.dimX*self.dimY # 40 * 30
-        #self.mLayer = pygame.Surface(pScreen.get_size())
-        #self.mLayer = self.mLayer.convert_alpha()
-        #self.mLayer.fill((0, 0, 0, 0))
-        
-        #self.sLayer = pygame.Surface(pScreen.get_size())
-        #self.sLayer = self.sLayer.convert_alpha()
-        #self.sLayer.fill((0, 0, 0, 0))
-
-        self.currentCell = random.randint(0, self.totalCells-1)
-
-    def myLocation(self):
-        return self.currentCell
-
-class Maze(Layout):
-    
-    def __init__(self):
-        super(Maze,self).__init__()
         self.mazeArray = []
         self.ghostArray=[]
         self.ghostLocations=[]
@@ -77,60 +56,60 @@ class Maze(Layout):
         self.visitedCells = 1
         self.score=0
         self.mazeDict={}
-        
-        self.bubbleArray=random.sample(range(1, self.totalCells-1), 1)
+        self.currentCell = 0       
+        self.bubbleArray=random.sample(range(1, cTotalCells-1), 1)
 
         bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
         bg = Sprite(bg_asset, (0,0))
 
         
-        for y in range(self.dimY): # 80 wide + 60 tall
-            for x in range(self.dimX):
-                self.mazeDict['H:'+str(x)+':'+str(y)]=Sprite(aCellWallH,(x*self.cellSize, y*self.cellSize))
-            #pygame.draw.line(self.mLayer, (0,0,0,255), (0, y*self.cellSize), (self.dimX*self.cellSize, y*self.cellSize))
-            for x in range(self.dimX):
+        for y in range(cHeight): # 80 wide + 60 tall
+            for x in range(cWidth):
+                self.mazeDict['H:'+str(x)+':'+str(y)]=Sprite(aCellWallH,(x*cCellSize, y*cCellSize))
+            #pygame.draw.line(self.mLayer, (0,0,0,255), (0, y*cCellSize), (cWidth*cCellSize, y*cCellSize))
+            for x in range(cWidth):
                 self.mazeArray.append(0)
                 if ( y == 0 ):
-                    for yi in range(self.dimY):
-                        self.mazeDict['V:'+str(x)+':'+str(yi)]=Sprite(aCellWallV,(x*self.cellSize, yi*self.cellSize))
-                    #pygame.draw.line(self.mLayer, (0,0,0,255), (x*self.cellSize,0), (x*self.cellSize,self.dimY*self.cellSize))
-        while(self.visitedCells < self.totalCells):
-            x = int(self.currentCell % self.dimX)
-            y = int(self.currentCell / self.dimX)
+                    for yi in range(cHeight):
+                        self.mazeDict['V:'+str(x)+':'+str(yi)]=Sprite(aCellWallV,(x*cCellSize, yi*cCellSize))
+                    #pygame.draw.line(self.mLayer, (0,0,0,255), (x*cCellSize,0), (x*cCellSize,cHeight*cCellSize))
+        while(self.visitedCells < cTotalCells):
+            x = int(self.currentCell % cWidth)
+            y = int(self.currentCell / cWidth)
             neighbors = []
             for i in range(4):
-                nx = x + self.compass[i][0]
-                ny = y + self.compass[i][1]
-                if ((nx >= 0) and (ny >= 0) and (nx < self.dimX) and (ny < self.dimY)):
-                    if (self.mazeArray[(ny*self.dimX+nx)] & 0x000F) == 0:
-                        nidx = ny*self.dimX+nx
+                nx = x + compass[i][0]
+                ny = y + compass[i][1]
+                if ((nx >= 0) and (ny >= 0) and (nx < cWidth) and (ny < cHeight)):
+                    if (self.mazeArray[(ny*cWidth+nx)] & 0x000F) == 0:
+                        nidx = ny*cWidth+nx
                         neighbors.append((nidx,1<<i))
             if len(neighbors) > 0:
                 idx = random.randint(0,len(neighbors)-1)
                 nidx,direction = neighbors[idx]
-                dx = x*self.cellSize
-                dy = y*self.cellSize
+                dx = x*cCellSize
+                dy = y*cCellSize
                 if direction & 1:
                     self.mazeArray[nidx] |= (4)
                     self.mazeDict['V:'+str(x)+':'+str(y)].destroy()
                     del self.mazeDict['V:'+str(x)+':'+str(y)]
-                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx,dy+1),(dx,dy+self.cellSize-1))
+                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx,dy+1),(dx,dy+cCellSize-1))
                 elif direction & 2:
                     self.mazeArray[nidx] |= (8)
                     self.mazeDict['H:'+str(x)+':'+str(y+1)].destroy()
                     del self.mazeDict['H:'+str(x)+':'+str(y+1)]
-                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy+self.cellSize),(dx+self.cellSize-1,dy+self.cellSize))
+                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy+cCellSize),(dx+cCellSize-1,dy+cCellSize))
                 elif direction & 4:
                     self.mazeArray[nidx] |= (1)
                     self.mazeDict['V:'+str(x+1)+':'+str(y)].destroy()
                     del self.mazeDict['V:'+str(x+1)+':'+str(y)]
-                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+self.cellSize,dy+1),(dx+self.cellSize,dy+self.cellSize-1))
+                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+cCellSize,dy+1),(dx+cCellSize,dy+cCellSize-1))
                 elif direction & 8:
                     self.mazeArray[nidx] |= (2)
                     self.mazeDict['H:'+str(x)+':'+str(y)].destroy()
                     del self.mazeDict['H:'+str(x)+':'+str(y)]
                     
-                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy),(dx+self.cellSize-1,dy))
+                    #pygame.draw.line(self.mLayer, (0,0,0,0), (dx+1,dy),(dx+cCellSize-1,dy))
                 self.mazeArray[self.currentCell] |= direction
                 self.cellStack.append(self.currentCell)
                 self.currentCell = nidx
@@ -148,11 +127,11 @@ class Maze(Layout):
     def drawBubbles(self):
         for bubbleCell in self.bubbleArray:
             
-            dx = int(bubbleCell % self.dimX)*self.cellSize+self.cellSize/2
-            dy = int(bubbleCell / self.dimX)*self.cellSize+self.cellSize/2
+            dx = int(bubbleCell % cWidth)*cCellSize+cCellSize/2
+            dy = int(bubbleCell / cWidth)*cCellSize+cCellSize/2
             Sprite(aBubble, (dx,dy))
-            #pygame.draw.circle(self.sLayer, (0,0,255,200), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/4)
-
+            
+            
     def runGhosts(self):
         self.ghost1.update()
         #for g in self.ghostArray:
@@ -160,21 +139,21 @@ class Maze(Layout):
         #    print (self.ghostArray)
         #    print(g)
             #g.update()
-        #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+self.cellSize/4,dy+self.cellSize/4,self.cellSize/2,self.cellSize/2))
+        #pygame.draw.rect(self.sLayer, (0,255,0,255), Rect(dx+cCellSize/4,dy+cCellSize/4,cCellSize/2,cCellSize/2))
             
     def drawRunner(self):
         
-        dx = int(self.currentCell % self.dimX)*self.cellSize
-        dy = int(self.currentCell / self.dimX)*self.cellSize
+        dx = int(self.currentCell % cWidth)*cCellSize
+        dy = int(self.currentCell / cWidth)*cCellSize
         if self.Runner.getState()=='Playing':
             pass
-            #pygame.draw.circle(self.sLayer, (250,240,0,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
+            #pygame.draw.circle(self.sLayer, (250,240,0,250), (dx+cCellSize/2,dy+cCellSize/2),cCellSize/2-1)
         elif self.Runner.getState()=='Lost':
             pass
-            #pygame.draw.circle(self.sLayer, (211,211,211,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
+            #pygame.draw.circle(self.sLayer, (211,211,211,250), (dx+cCellSize/2,dy+cCellSize/2),cCellSize/2-1)
         elif self.Runner.getState()=='Won':
             pass
-            #pygame.draw.circle(self.sLayer, (0,255,255,250), (dx+self.cellSize/2,dy+self.cellSize/2),self.cellSize/2-1)
+            #pygame.draw.circle(self.sLayer, (0,255,255,250), (dx+cCellSize/2,dy+cCellSize/2),cCellSize/2-1)
             
             
     def getMazeArray(self):
@@ -214,7 +193,7 @@ class Maze(Layout):
         for g in self.ghostArray:
             g.update()
             ghostLocation=g.myLocation()
-            if ghostLocation==self.totalCells-1:
+            if ghostLocation==cTotalCells-1:
                 self.ghostArray.remove(g)
                 ghost1=Ghost(self.getMazeArray(), self.getCellStack())
                 self.addGhost(ghost1)
@@ -231,33 +210,34 @@ class Maze(Layout):
             if len(self.bubbleArray)==0:
                 self.Runner.setState('Won')
         """
-class Ghost(Layout):
+class Ghost():
         
     def __init__(self,mArray, cStack):
-        super(Ghost,self).__init__()
         self.mazeArray = mArray
         self.cellStack=cStack
-
-        dx = int(self.currentCell % self.dimX)*self.cellSize+int(self.cellSize/4)
-        dy = int(self.currentCell / self.dimX)*self.cellSize+int(+self.cellSize/4)
+        self.currentCell = random.randint(0, cTotalCells-1)
+        
+        dx = int(self.currentCell % cWidth)*cCellSize+int(cCellSize/4)
+        dy = int(self.currentCell / cWidth)*cCellSize+int(+cCellSize/4)
         self.gImage=Sprite(aGhost,(dx,dy))
+        
 
 
     def update(self):
-        if self.currentCell == (self.totalCells-1): # have we reached the exit?            
+        if self.currentCell == (cTotalCells-1): # have we reached the exit?            
             return
         moved = False
         while(moved == False):
-            x = int(self.currentCell % self.dimX)
-            y = int(self.currentCell / self.dimX)
+            x = int(self.currentCell % cWidth)
+            y = int(self.currentCell / cWidth)
             neighbors = []
             directions = self.mazeArray[self.currentCell] & 0xF
             for i in range(4):
                 if (directions & (1<<i)) > 0:
-                    nx = x + self.compass[i][0]
-                    ny = y + self.compass[i][1]
-                    if ((nx >= 0) and (ny >= 0) and (nx < self.dimX) and (ny < self.dimY)):              
-                        nidx = ny*self.dimX+nx
+                    nx = x + compass[i][0]
+                    ny = y + compass[i][1]
+                    if ((nx >= 0) and (ny >= 0) and (nx < cWidth) and (ny < cHeight)):              
+                        nidx = ny*cWidth+nx
                         if ((self.mazeArray[nidx] & 0xFF00) == 0): # make sure there's no backtrack
                             neighbors.append((nidx,1<<i))
             if len(neighbors) > 0:
@@ -280,46 +260,50 @@ class Ghost(Layout):
                 self.currentCell = self.cellStack.pop()
 
                                 
-        dx = int(self.currentCell % self.dimX)*self.cellSize+int(self.cellSize/4)
-        dy = int(self.currentCell / self.dimX)*self.cellSize+int(+self.cellSize/4)
+        dx = int(self.currentCell % cWidth)*cCellSize+int(cCellSize/4)
+        dy = int(self.currentCell / cWidth)*cCellSize+int(+cCellSize/4)
         self.gImage.x=dx
         self.gImage.y=dy
         
     def getSprite(self):
         return self.gImage
-
-class Runner(Layout):
+        
+    def myLocation(self):
+        return self.currentCell
+        
+class Runner():
         
     def __init__(self, mArray, cStack):
-        super(Runner,self).__init__()
         self.mazeArray = mArray
         self.cellStack=cStack
         self.state='Playing'
-        dx = int(self.currentCell % self.dimX)*self.cellSize+self.cellSize/2
-        dy = int(self.currentCell / self.dimX)*self.cellSize+self.cellSize/2
+        self.currentCell = random.randint(0, cTotalCells-1)        
+        dx = int(self.currentCell % cWidth)*cCellSize+cCellSize/2
+        dy = int(self.currentCell / cWidth)*cCellSize+cCellSize/2
         self.rImage=Sprite(aRunner, (dx, dy))
+
         
     def update(self, uDirection):
         
         if self.state=='Lost':
             return
         
-        x = int(self.currentCell % self.dimX)
-        y = int(self.currentCell / self.dimX)
-        dx = x*self.cellSize
-        dy = y*self.cellSize
+        x = int(self.currentCell % cWidth)
+        y = int(self.currentCell / cWidth)
+        dx = x*cCellSize
+        dy = y*cCellSize
         
         neighbors = []
         directions = self.mazeArray[self.currentCell] & 0xF
         for i in range(4):
             if (directions & (1<<i)) > 0:
-                nx = x + self.compass[i][0]
-                ny = y + self.compass[i][1]
+                nx = x + compass[i][0]
+                ny = y + compass[i][1]
                 
-                if ((nx >= 0) and (ny >= 0) and (nx < self.dimX) and (ny < self.dimY)): 
-                    nidx = ny*self.dimX+nx
-                    nX=int(nidx % self.dimX)*self.cellSize
-                    nY=int(nidx / self.dimX)*self.cellSize
+                if ((nx >= 0) and (ny >= 0) and (nx < cWidth) and (ny < cHeight)): 
+                    nidx = ny*cWidth+nx
+                    nX=int(nidx % cWidth)*cCellSize
+                    nY=int(nidx / cWidth)*cCellSize
                      
                     if (uDirection=='up') and (nY<dy):
                         neighbors.append((nidx,1<<i))
@@ -349,8 +333,8 @@ class Runner(Layout):
             self.cellStack.append(self.currentCell)
             self.currentCell = nidx
 
-        dx = int(self.currentCell % self.dimX)*self.cellSize+self.cellSize/2
-        dy = int(self.currentCell / self.dimX)*self.cellSize+self.cellSize/2
+        dx = int(self.currentCell % cWidth)*cCellSize+cCellSize/2
+        dy = int(self.currentCell / cWidth)*cCellSize+cCellSize/2
         self.rImage.x=dx
         self.rImage.y=dy
 
@@ -364,6 +348,8 @@ class Runner(Layout):
     def getSprite(self):
         return self.rImage
 
+    def myLocation(self):
+        return self.currentCell
 
 class MazeGame(App):
 
