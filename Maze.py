@@ -66,7 +66,7 @@ class Maze():
         self.bg = Sprite(bg_asset, (0,0))
         
         self.footer=Sprite(TextAsset(text='Maze Runner. Level - '+str(cLeveli), width=250, align='center',style='20px Arial', fill=blue),((cWidth*cCellSize-250)/2, cHeight*cCellSize+20))
-        self.gOver=TextAsset(text='Game Over'+str(cLeveli), width=250, align='center',style='20px Arial', fill=red)
+        self.gOver=TextAsset(text='Game Over!', width=100, align='center',style='20px Arial', fill=red)
         
         for y in range(cHeight):
             for x in range(cWidth):
@@ -148,7 +148,7 @@ class Maze():
 
         if len(self.Runner.collidingWithSprites(Ghost))>0:
             self.Runner.setState('Lost')
-            Sprite(self.gOver)
+            Sprite(self.gOver, (cWidth*cCellSize/2, cHeight*cCellSize/2))
         
         
         trophies=self.Runner.collidingWithSprites(Trophy)
