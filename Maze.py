@@ -190,7 +190,6 @@ class Ghost(Sprite):
         super().__init__(aGhost, (dx, dy))
 
 
-
     def update(self):
         if self.currentCell == (cTotalCells-1): # have we reached the exit?            
             return
