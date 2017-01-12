@@ -16,7 +16,7 @@ cCellSize=16
 aCellWallH = LineAsset(cCellSize,0,thinline)
 aCellWallV = LineAsset(0,cCellSize,thinline)
 aBubble    = CircleAsset(cCellSize/4,noline,blue)
-aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,green)
+aGhost     = RectangleAsset(cCellSize/2,cCellSize/2,noline,red)
 aRunner    = CircleAsset(cCellSize/2-1,noline,yellow)
 
 compass = [(-1,0),(0,1),(1,0),(0,-1)]
@@ -270,7 +270,7 @@ class Ghost(Sprite):
     def myLocation(self):
         return self.currentCell
         
-class Runner():
+class Runner(Sprite):
         
     def __init__(self, mArray, cStack):
         self.mazeArray = mArray
@@ -279,7 +279,7 @@ class Runner():
         self.currentCell = random.randint(0, cTotalCells-1)        
         dx = int(self.currentCell % cWidth)*cCellSize+cCellSize/2
         dy = int(self.currentCell / cWidth)*cCellSize+cCellSize/2
-        self.rImage=Sprite(aRunner, (dx, dy))
+        super().__init__(aRunner, (dx, dy))
 
         
     def update(self, uDirection):
@@ -334,8 +334,8 @@ class Runner():
 
         dx = int(self.currentCell % cWidth)*cCellSize+cCellSize/2
         dy = int(self.currentCell / cWidth)*cCellSize+cCellSize/2
-        self.rImage.x=dx
-        self.rImage.y=dy
+        self.x=dx
+        self.y=dy
 
             
     def getState(self):
