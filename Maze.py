@@ -30,7 +30,7 @@ cTotalCells=0
 
 
     
-def incGlobals():
+def incGlobals(start=0):
     global cLevel
     global cLeveli
     global cWidth
@@ -165,50 +165,19 @@ class Maze():
     def addRunner(self, pRunner):
         self.Runner=pRunner
 
-                    
-    def draw(self):
-        #self.sLayer.fill((0, 0, 0, 0))
-
-        self.drawBubbles()
-        self.drawGhosts()                
-        self.drawRunner()        
-        
-        #screen.blit(self.sLayer, (0,0))
-        #screen.blit(self.mLayer, (0,0))
-        
     def checkCollisions(self):
 
-        
         if len(self.Runner.collidingWithSprites(Ghost))>0:
-            print ('collding')
-        else:
-            print ('lucky')
- 
-    """
-        self.ghostLocations=[]
-        ghostLocation=0
-        pCell=self.Runner.myLocation()
-
-        for g in self.ghostArray:
-            g.update()
-            ghostLocation=g.myLocation()
-            if ghostLocation==cTotalCells-1:
-                self.ghostArray.remove(g)
-                ghost1=Ghost(self.getMazeArray(), self.getCellStack())
-                self.addGhost(ghost1)
-            else:
-                self.ghostLocations.append(ghostLocation)
-        
-        if pCell in self.ghostLocations:
             self.Runner.setState('Lost')
-            return
-         
-        if pCell in self.bubbleArray:
+            print ('lost')
+
+        if len(self.Runner.collidingWithSprites(Trophy))>0:
             self.score +=1
             self.bubbleArray.remove(pCell)
             if len(self.bubbleArray)==0:
                 self.Runner.setState('Won')
-        """
+            print ('won')
+
 class Ghost(Sprite):
         
     def __init__(self,mArray, cStack):
