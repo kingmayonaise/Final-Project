@@ -65,8 +65,8 @@ class Maze():
         bg_asset = RectangleAsset(cWidth*cCellSize, cHeight*cCellSize, thinline, white)
         self.bg = Sprite(bg_asset, (0,0))
         
-        Sprite(TextAsset(text='Maze Runner. Level - '+str(cLeveli), width=cWidth*cCellSize, align='center',style='20px Arial', fill=Color(0xff2222,1)),(0, cHeight*cCellSize+20))
-
+        self.footer=Sprite(TextAsset(text='Maze Runner. Level - '+str(cLeveli), width=250, align='center',style='20px Arial', fill=blue),((cWidth*cCellSize-250)/2, cHeight*cCellSize+20))
+        self.gOver=TextAsset(text='Game Over'+str(cLeveli), width=250, align='center',style='20px Arial', fill=red)
         
         for y in range(cHeight):
             for x in range(cWidth):
@@ -148,6 +148,7 @@ class Maze():
 
         if len(self.Runner.collidingWithSprites(Ghost))>0:
             self.Runner.setState('Lost')
+            Sprite(self.gOver)
         
         
         trophies=self.Runner.collidingWithSprites(Trophy)
@@ -163,8 +164,7 @@ class Maze():
             
     def selfDestruct(self):
         self.bg.destroy()
-        #for t in self.trophyDict:
-        #    self.
+        self.footer.destroy()
         for k in self.mazeDict:
             self.mazeDict[k].destroy()
         for g in self.ghostArray:
