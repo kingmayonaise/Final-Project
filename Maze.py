@@ -1,3 +1,7 @@
+#https://forums.tigsource.com/index.php?topic=4589.0
+#Luke Arntson, Jan '09
+#Written using - http://www.mazeworks.com/mazegen/mazetut/index.htm
+
 import random
 from ggame import App, Color, LineStyle, Sprite, LineAsset, RectangleAsset, CircleAsset, PolygonAsset, TextAsset, Frame, KeyEvent
 
@@ -67,7 +71,8 @@ class Maze():
         
         self.footer=Sprite(TextAsset(text='Maze Runner. Level - '+str(cLeveli), width=250, align='center',style='20px Arial', fill=blue),((cWidth*cCellSize-200)/2, cHeight*cCellSize+20))
         self.gOver=TextAsset(text='Game Over!', width=140, align='center',style='20px Arial', fill=red)
-        
+
+        #----------borrowed, heavily reworked----------------------
         for y in range(cHeight):
             for x in range(cWidth):
                 self.mazeDict['H:'+str(x)+':'+str(y)]=Sprite(aCellWallH,(x*cCellSize, y*cCellSize))
@@ -115,6 +120,7 @@ class Maze():
                 self.visitedCells = self.visitedCells + 1
             else:
                 self.currentCell = self.cellStack.pop()
+            #--------------------------------
         
         for i in range(cLeveli):
             self.ghostArray.append(Ghost(self.getMazeArray(), self.getCellStack()))
@@ -185,6 +191,8 @@ class Ghost(Sprite):
         if self.currentCell == (cTotalCells-1): # have we reached the exit?            
             return
         moved = False
+        
+        #----------borrowed, heavily reworked----------------------
         while(moved == False):
             x = int(self.currentCell % cWidth)
             y = int(self.currentCell / cWidth)
@@ -216,7 +224,7 @@ class Ghost(Sprite):
             else:
                 self.mazeArray[self.currentCell] &= 0xF0FF # not a solution
                 self.currentCell = self.cellStack.pop()
-
+            #--------------------------------
                                 
         dx = int(self.currentCell % cWidth)*cCellSize+int(cCellSize/4)
         dy = int(self.currentCell / cWidth)*cCellSize+int(+cCellSize/4)
@@ -251,6 +259,7 @@ class Runner(Sprite):
         dx = x*cCellSize
         dy = y*cCellSize
         
+        #----------borrowed, heavily reworked----------------------
         neighbors = []
         directions = self.mazeArray[self.currentCell] & 0xF
         for i in range(4):
@@ -290,7 +299,8 @@ class Runner(Sprite):
             self.mazeArray[self.currentCell] |= direction << 8
             self.cellStack.append(self.currentCell)
             self.currentCell = nidx
-
+        #--------------------------------
+        
         dx = int(self.currentCell % cWidth)*cCellSize+cCellSize/2
         dy = int(self.currentCell / cWidth)*cCellSize+cCellSize/2
         self.x=dx
@@ -317,7 +327,6 @@ class MazeGame(App):
         commands = ["left", "right", "up", "down"]
         self.keymap = dict(zip(keys, commands))
         [self.listenKeyEvent("keydown", k, self.runnerRuns) for k in keys]
-        #[self.listenKeyEvent("keyup", k, self.controlup) for k in keys]
         self.state='Playing'
         
     def startRun(self):
@@ -347,10 +356,6 @@ class MazeGame(App):
         self.myRunner.update(self.keymap[evt.key])
         evt.consumed=True
         
-            
-    def stopRun(self,evt):
-        print (evt)
-        evt.consumed=True
 
 
 myapp = MazeGame(600,600)
