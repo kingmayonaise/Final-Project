@@ -157,6 +157,9 @@ class Maze():
     def selfDestruct(self):
         for k in self.mazeDict:
             self.mazeDict[k].destroy()
+        
+        for g in self.ghostArray:
+            g.destroy()
 
 class Ghost(Sprite):
         
