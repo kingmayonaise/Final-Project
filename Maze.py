@@ -322,7 +322,6 @@ class MazeGame(App):
         super().__init__(width, height)
         self.startRun()
         self.steps=0
-        self.listenKeyEvent('keydown', 'escape', self.stopRun)
         keys=["left arrow", "right arrow", "up arrow", "down arrow"]
         commands = ["left", "right", "up", "down"]
         self.keymap = dict(zip(keys, commands))
