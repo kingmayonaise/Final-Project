@@ -184,7 +184,7 @@ class Maze():
         else:
             print ('lucky')
  
-    
+    """
         self.ghostLocations=[]
         ghostLocation=0
         pCell=self.Runner.myLocation()
