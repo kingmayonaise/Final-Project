@@ -332,7 +332,7 @@ class MazeGame(App):
             self.startRun()
             
         self.steps+=1
-        if ((self.steps % 25) == 0):
+        if ((self.steps % 25) == 0) && (self.myRunner.getState()=='Playing'):
             self.newMaze.runGhosts()
         
         self.newMaze.checkCollisions()
